@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import hamburgerIcon from "../../assets/header/Hamburger.svg";
+import { useNavigate } from "react-router-dom";
+import hamburgerIcon from "../../assets/nav/Hamburger.svg";
+import signout from "../../assets/nav/signout.svg";
+import dashboard from "../../assets/nav/dashboard.svg";
 import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
 
@@ -43,14 +45,22 @@ export default function Navbar() {
           />
         </button>
         <ul
-          className={`z-50 overflow-hidden list-none w-max top-full left-0 absolute bg-blue-300 transition-all duration-300 ease-in-out ${
+          className={`z-50 overflow-hidden list-none w-max top-full left-0 absolute bg-blue-100 transition-all duration-300 ease-in-out ${
             menuOpen ? "max-h-64" : "max-h-0"
           }`}
         >
-          <li className="navLinkItem navButtons" onClick={handleGoToDashboard}>
+          <li
+            className="navLinkItem flex flex-row justify-start items-center"
+            onClick={handleGoToDashboard}
+          >
+            <img src={dashboard} alt="home icon" className="w-5 mr-3" />
             Dashboard
           </li>
-          <li className="navLinkItem navButtons" onClick={handleSignOutClick}>
+          <li
+            className="navLinkItem flex flex-row justify-start items-center"
+            onClick={handleSignOutClick}
+          >
+            <img src={signout} alt="home icon" className="w-5 mr-3" />
             Sign Out
           </li>
         </ul>

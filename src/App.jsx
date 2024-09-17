@@ -26,7 +26,7 @@ function App() {
   return isLoading ? (
     "Loading"
   ) : (
-    <div className="bg-backgroundCream h-screen box-border">
+    <div className="bg-backgroundCream h-screen box-border px-3">
       {console.log(userLoggedIn)}
       {(guardianLoggedIn || carerLoggedIn) && <Header />}
       <Routes>
