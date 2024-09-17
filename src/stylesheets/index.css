@@ -1,1 +1,4 @@
-@import "./App.css";
+@import "./mobileNav.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

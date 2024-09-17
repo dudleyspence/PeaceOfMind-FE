@@ -5,11 +5,12 @@ export const UserContext = createContext();
 export const UserProvider = (props) => {
   const [guardianLoggedIn, setGuardianLoggedIn] = useState(() => {
     const storedGuardian = localStorage.getItem("guardianLoggedIn");
-    return storedGuardian ? storedGuardian : null;
+    console.log(storedGuardian);
+    return storedGuardian ? JSON.parse(storedGuardian) : null;
   });
   const [carerLoggedIn, setCarerLoggedIn] = useState(() => {
-    const storedCarer = localstorage.getItem("carerLoggedIn");
-    return storedCarer ? storedCarer : null;
+    const storedCarer = localStorage.getItem("carerLoggedIn");
+    return storedCarer ? JSON.parse(storedCarer) : null;
   });
 
   return (
