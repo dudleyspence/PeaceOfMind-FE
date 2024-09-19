@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
 import { ProgressBar } from "../General/ProgressBar";
+import { useNavigate } from "react-router-dom";
 export default function PatientList() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -19,6 +21,10 @@ export default function PatientList() {
     }
   }, [guardianLoggedIn, carerLoggedIn]);
 
+  function handlePatientClick(patient_id) {
+    navigate(`/patient/${patient_id}`);
+  }
+
   return isLoading ? (
     "Loading patients"
   ) : (
@@ -28,8 +34,11 @@ export default function PatientList() {
 
         {patientsList.map((patient) => (
           <li
+            onClick={() => {
+              handlePatientClick(patient._id);
+            }}
             key={patient._id}
-            className="flex flex-row items-center justify-between gap-4 bg-blue-200 w-full p-5 mt-7 px-8 rounded-md shadow-md max-w-md"
+            className="flex flex-row items-center justify-between gap-4 bg-white w-full p-5 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer"
           >
             <div>
               <p className="mb-3 font-bold">{patient.name}</p>
