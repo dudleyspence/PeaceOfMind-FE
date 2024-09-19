@@ -14,11 +14,11 @@ export default function PatientInfoCard({ patient }) {
   return (
     <div
       id="patient-profile"
-      className="bg-blue-50 w-full max-w-96 rounded-2xl shadow-md min-h-40 cursor-pointer"
+      className="bg-blue-50 w-full max-w-96 rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden"
       onClick={toggleOpen}
     >
       <div className="flex flex-row justify-start">
-        <div className="w-1/3 h-auto aspect-square rounded-2xl overflow-hidden max-w-36">
+        <div className="w-1/3 h-auto aspect-square rounded-lg overflow-hidden max-w-36">
           <img
             src={patient.profileImageURL}
             alt="patient image"
@@ -164,7 +164,7 @@ export default function PatientInfoCard({ patient }) {
         click here for more info
       </p>
       <Collapse open={open}>
-        <Card className="mt-4 mx-auto w-full">
+        <Card className="mt-4 mx-auto w-full rounded-lg">
           <CardBody>
             <Typography className="text-black">{patient.about}</Typography>
           </CardBody>

@@ -3,9 +3,7 @@ import { DayList } from "./DayList";
 
 export default function SelectDate({ patient_id }) {
   return (
-    <div className="bg-purple-100 p-5 rounded-2xl shadow-lg w-full max-w-sm">
-      <p>Select the day:</p>
-      <button>History</button>
+    <div className="bg-purple-100 p-5 rounded-lg shadow-lg w-full max-w-sm">
       <DayList patient_id={patient_id} />
     </div>
   );

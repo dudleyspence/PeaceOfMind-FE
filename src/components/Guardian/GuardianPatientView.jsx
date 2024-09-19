@@ -36,20 +36,15 @@ export default function GuardianPatientView() {
     <div className="min-h-[calc(100%-6rem)] w-full flex justify-center items-center">
       <div
         id="patient-homepage"
-        className="flex flex-col justify-center items-center w-full h-full gap-5 my-5 max-w-5xl"
+        className="grid grid-cols-2 w-full h-full gap-5 max-w-3xl max-h-lg"
       >
-        <div className="w-full flex flex-row items-start justify-center gap-5">
-          <PatientInfoCard patient={patient} />
-          <CarerInfoCard carer={carer} />
-        </div>
-
-        <div className="w-full flex flex-row items-start justify-center gap-5">
+        <PatientInfoCard patient={patient} />
+        <div className="row-span-2">
           <SelectDate patient_id={patient._id} />
-          <div className="w-full max-w-sm">
-            <ProgressTab />
-            <RepeatingTasksList patient_id={patient_id} />
-          </div>
         </div>
+        <CarerInfoCard carer={carer} />
+        <RepeatingTasksList patient_id={patient_id} />
+        <ProgressTab />
       </div>
     </div>
   );

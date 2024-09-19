@@ -132,8 +132,9 @@ export function EditRecurringTask({ task, setTaskUpdates }) {
               name="name"
               value={taskText}
               className="
-              border-t-gray-400
-              focus:!border-t-gray-900"
+              !border-t-gray-600
+              border-gray-600
+              focus:!border-gray-900"
               containerProps={{
                 className: "!min-w-full",
               }}
@@ -152,7 +153,7 @@ export function EditRecurringTask({ task, setTaskUpdates }) {
             </Typography>
             <Select
               onChange={handleCategoryChange}
-              className="!w-full !border-[1.5px] !border-blue-gray-200/90 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
+              className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
               placeholder="1"
               value={taskCategory}
               labelProps={{
