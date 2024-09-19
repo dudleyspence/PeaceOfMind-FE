@@ -1,10 +1,21 @@
 import React from "react";
+import {
+  Collapse,
+  Button,
+  Card,
+  Typography,
+  CardBody,
+} from "@material-tailwind/react";
 
 export default function PatientInfoCard({ patient }) {
+  const [open, setOpen] = React.useState(false);
+
+  const toggleOpen = () => setOpen((cur) => !cur);
   return (
     <div
       id="patient-profile"
-      className="bg-blue-50 w-full max-w-96 rounded-2xl shadow-md"
+      className="bg-blue-50 w-full max-w-96 rounded-2xl shadow-md min-h-40 cursor-pointer"
+      onClick={toggleOpen}
     >
       <div className="flex flex-row justify-start">
         <div className="w-1/3 h-auto aspect-square rounded-2xl overflow-hidden max-w-36">
@@ -149,7 +160,16 @@ export default function PatientInfoCard({ patient }) {
           </p>
         </div>
       </div>
-      <p className="m-3 text-sm">{patient.about}</p>
+      <p className="flex gap-1 items-center justify-center m-2 text-sm">
+        click here for more info
+      </p>
+      <Collapse open={open}>
+        <Card className="mt-4 mx-auto w-full">
+          <CardBody>
+            <Typography className="text-black">{patient.about}</Typography>
+          </CardBody>
+        </Card>
+      </Collapse>
     </div>
   );
 }
