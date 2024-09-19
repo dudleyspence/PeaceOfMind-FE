@@ -53,8 +53,12 @@ export default function RepeatingTasksList({ patient_id }) {
     "loading"
   ) : (
     <React.Fragment>
-      <div className="flex flex-wrap gap-4">
-        <Button onClick={openDrawerRight}>Open Drawer Right</Button>
+      <div className="bg-red-200 rounded-lg p-3">
+        <h1 className="font-bold mb-3">Care Plan Controls:</h1>
+        <div className="flex flex-row gap-4 max-h-14">
+          <Button onClick={openDrawerRight}>View Current Routine</Button>
+          <Button>Add new task</Button>
+        </div>
       </div>
 
       <Drawer
@@ -87,7 +91,7 @@ export default function RepeatingTasksList({ patient_id }) {
           </div>
           <div className="flex flex-col gap-6">
             {repeatingTasks.Meals.length > 0 && (
-              <ul id="Meals" className="bg-white p-5 rounded-2xl shadow-lg">
+              <ul id="Meals" className="bg-white p-5 rounded-lg shadow-lg">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
                     className="h-6"
@@ -196,7 +200,7 @@ export default function RepeatingTasksList({ patient_id }) {
               </ul>
             )}
             {repeatingTasks.Medical.length > 0 && (
-              <ul id="Medical" className="bg-white p-5 rounded-2xl shadow-lg ">
+              <ul id="Medical" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
                     className="h-5"
@@ -252,7 +256,7 @@ export default function RepeatingTasksList({ patient_id }) {
               </ul>
             )}
             {repeatingTasks.Hygiene.length > 0 && (
-              <ul id="Hygeine" className="bg-white p-5 rounded-2xl shadow-lg ">
+              <ul id="Hygeine" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
                     className="h-5"
@@ -333,7 +337,7 @@ export default function RepeatingTasksList({ patient_id }) {
               </ul>
             )}
             {repeatingTasks.Exercise.length > 0 && (
-              <ul id="Exercise" className="bg-white p-5 rounded-2xl shadow-lg ">
+              <ul id="Exercise" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
                     className="h-5"
@@ -381,7 +385,7 @@ export default function RepeatingTasksList({ patient_id }) {
             {repeatingTasks.Additional.length > 0 && (
               <ul
                 id="Additional"
-                className="bg-white p-5 rounded-2xl shadow-lg "
+                className="bg-white p-5 rounded-lg shadow-lg "
               >
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg

@@ -33,7 +33,7 @@ export default function GuardianPatientView() {
   return isLoading ? (
     "Loading"
   ) : (
-    <div className="min-h-[calc(100%-6rem)] w-full flex justify-center items-center">
+    <div className="min-h-[calc(100vh-6rem)] w-full flex justify-center items-center">
       <div
         id="patient-homepage"
         className="grid grid-cols-2 w-full h-full gap-5 max-w-3xl max-h-lg"

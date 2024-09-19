@@ -14,7 +14,7 @@ export default function PatientInfoCard({ patient }) {
   return (
     <div
       id="patient-profile"
-      className="bg-blue-50 w-full max-w-96 rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden"
+      className="bg-blue-100 w-full max-w-96 rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden"
       onClick={toggleOpen}
     >
       <div className="flex flex-row justify-start">
