@@ -24,7 +24,6 @@ export default function GuardianDashboard() {
     "Loading User"
   ) : (
     <div className="h-[calc(100%-6rem)] flex flex-col items-center gap-8">
-      <h1 className="text-2xl my-5">Welcome back to Peace of Mind</h1>
       <div className="flex flex-row items-center gap-5 p-5 rounded-md shadow-lg bg-cyan-900 max-w-md">
         <div className="w-1/3 h-auto aspect-square rounded-full overflow-hidden max-w-36">
           <img
