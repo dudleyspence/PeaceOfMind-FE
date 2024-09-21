@@ -5,7 +5,6 @@ export const UserContext = createContext();
 export const UserProvider = (props) => {
   const [guardianLoggedIn, setGuardianLoggedIn] = useState(() => {
     const storedGuardian = localStorage.getItem("guardianLoggedIn");
-    console.log(storedGuardian);
     return storedGuardian ? JSON.parse(storedGuardian) : null;
   });
   const [carerLoggedIn, setCarerLoggedIn] = useState(() => {

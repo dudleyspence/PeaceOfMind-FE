@@ -17,7 +17,6 @@ export default function GuardianPatientDayView() {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log(patient_id);
     getPatientByPatientId({ patient_id }).then((patient) => {
       setIsLoading(false);
       setPatient(patient);

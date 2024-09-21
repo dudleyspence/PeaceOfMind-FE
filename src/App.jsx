@@ -9,6 +9,7 @@ import Header from "./components/Header/Header";
 import GuardianPatientView from "./components/Guardian/GuardianPatientView";
 import CarerPatientView from "./components/Carer/CarerPatientView";
 import GuardianPatientDayView from "./components/Guardian/GuardianPatientDayView";
+import { GuardianPatientViewMobile } from "./components/Guardian/GuardianPatientViewMobile";
 
 function App() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
@@ -30,7 +31,6 @@ function App() {
     "Loading"
   ) : (
     <div className="bg-backgroundCream min-h-screen box-border px-3">
-      {console.log(userLoggedIn)}
       {(guardianLoggedIn || carerLoggedIn) && <Header />}
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -50,7 +50,7 @@ function App() {
           path="/patient/:patient_id"
           element={
             guardianLoggedIn ? (
-              <GuardianPatientView />
+              <GuardianPatientViewMobile />
             ) : carerLoggedIn ? (
               <CarerPatientView />
             ) : (

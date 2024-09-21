@@ -5,7 +5,7 @@ import { getPatientByPatientId } from "../../axios/patient.axios";
 import PatientInfoCard from "../Patient/patientInfoCard";
 import CarerInfoCard from "../Patient/CarerInfoCard";
 import SelectDate from "../Patient/SelectDate";
-import RepeatingTasksList from "./RepeatingTasksList";
+import RepeatingTasksList from "../Patient/RepeatingTasksListDesktop";
 import ProgressTab from "../Patient/ProgressTab";
 
 export default function GuardianPatientView() {
@@ -24,7 +24,6 @@ export default function GuardianPatientView() {
   useEffect(() => {
     setIsLoading(true);
     getPatientByPatientId(patient_id).then((patient) => {
-      console.log(patient);
       setIsLoading(false);
       setPatient(patient);
       setCarer(patient.carers[0]);
