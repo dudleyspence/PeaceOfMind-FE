@@ -34,7 +34,7 @@ import {
 
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../Context/UserContext";
+import { UserContext } from "../../Context/UserContext";
 
 export function SideNavBar() {
   const [open, setOpen] = React.useState(0);

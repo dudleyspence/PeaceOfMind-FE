@@ -1,6 +1,6 @@
 import { Progress, Typography } from "@material-tailwind/react";
 
-export function ProgressBar({ percentageCompleted = 0 }) {
+export function PatientProgressBar({ percentageCompleted = 0 }) {
   return (
     <div className="w-full">
       <div className="mb-2 flex items-center justify-between gap-4">

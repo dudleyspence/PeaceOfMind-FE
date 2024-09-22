@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
-import { ProgressBar } from "../General/ProgressBar";
+import { PatientProgressBar } from "../Patient/PatientProgressBar";
 import { useNavigate } from "react-router-dom";
-export default function PatientList() {
+export default function GuardianPatientList() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +42,7 @@ export default function PatientList() {
           >
             <div>
               <p className="mb-3 font-bold">{patient.name}</p>
-              <ProgressBar />
+              <PatientProgressBar />
             </div>
             <img
               src={patient.profileImageURL}

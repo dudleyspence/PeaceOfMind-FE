@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
-import PatientList from "../Patient/PatientList";
+import PatientList from "./GuardianPatientList";
 import phone from "../../assets/dashboard/phone.svg";
 import email from "../../assets/dashboard/email.svg";
 import { NotificationsButton } from "../General/NotificationsButton";

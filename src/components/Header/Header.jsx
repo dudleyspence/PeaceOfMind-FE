@@ -1,7 +1,6 @@
 import React from "react";
 import logoSmall from "../../assets/Logo/PeaceOfMind_logo_small.png";
-import Navbar from "../Nav/navbar";
-import { SideNavBar } from "../Nav/SideNavBar";
+import { SideNavBar } from "./Nav/SideNavBar";
 
 export default function Header() {
   return (

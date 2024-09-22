@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getPatientByPatientId } from "../../axios/patient.axios";
 
-export default function GuardianPatientDayView() {
+export default function GuardianDayReview() {
   const [patient, setPatient] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [carer, setCarer] = useState(() => {

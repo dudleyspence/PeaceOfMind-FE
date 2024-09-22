@@ -17,7 +17,7 @@ export default function PatientInfoCard({ patient }) {
       className="bg-blue-100 w-full max-w-96 rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden"
       onClick={toggleOpen}
     >
-      <div className="flex flex-row justify-start">
+      <div className="flex flex-row justify-start text-black">
         <div className="w-1/3 h-auto aspect-square rounded-lg overflow-hidden max-w-36">
           <img
             src={patient.profileImageURL}
@@ -86,7 +86,7 @@ export default function PatientInfoCard({ patient }) {
             </svg>
             {patient.address}
           </p>
-          <p className="flex gap-1 items-center justify-start mt-2 text-base">
+          <p className="flex gap-1 items-center justify-start mt-2 text-base text-black">
             <svg
               className="fill-black h-5"
               xmlns="http://www.w3.org/2000/svg"

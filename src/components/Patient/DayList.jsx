@@ -1,7 +1,7 @@
 import { List, ListItem, Card } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChooseWeekControls } from "./ChooseWeekControls";
+import { SelectCareDayPagination } from "./SelectCareDayPaginiation";
 import React from "react";
 
 export function DayList({ patient_id }) {
@@ -45,7 +45,7 @@ export function DayList({ patient_id }) {
     <Card className="max-w-30">
       <List>
         <div className="flex flex-row items-center justify-center p-2">
-          <ChooseWeekControls active={active} setActive={setActive} />
+          <SelectCareDayPagination active={active} setActive={setActive} />
         </div>
         {previous7Days.map((day) => (
           <ListItem

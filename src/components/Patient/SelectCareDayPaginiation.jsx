@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
-export function ChooseWeekControls({ active, setActive }) {
+export function SelectCareDayPagination({ active, setActive }) {
   const prev = () => {
     if (active === 10) return;
 

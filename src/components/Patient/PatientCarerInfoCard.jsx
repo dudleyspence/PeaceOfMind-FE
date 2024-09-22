@@ -7,7 +7,7 @@ import {
   CardBody,
 } from "@material-tailwind/react";
 
-export default function CarerInfoCard({ carer }) {
+export default function PatientCarerInfoCard({ carer }) {
   const [open, setOpen] = React.useState(false);
   const toggleOpen = () => setOpen((cur) => !cur);
   return (
