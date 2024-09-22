@@ -46,19 +46,19 @@ export function GuardianPatientView() {
         {
           label: patient.name.split(" ")[0],
           value: "profile",
-          icon: Square3Stack3DIcon,
+          icon: UserCircleIcon,
           desc: (
             <div className="p-2 flex flex-col gap-5 rounded-lg">
               <PatientInfoCard patient={patient} />
-              <ProgressTab />
-              <SelectDate />
+              <ProgressTab patient_id={patient_id} />
+              <SelectDate patient_id={patient_id} />
             </div>
           ),
         },
         {
           label: "Care Plan",
           value: "Care",
-          icon: UserCircleIcon,
+          icon: Square3Stack3DIcon,
           desc: (
             <div className="p-2 flex flex-col">
               <CarerInfoCard carer={patient.carers[0]} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 export function SelectCareDayPagination({ active, setActive }) {
@@ -17,22 +17,32 @@ export function SelectCareDayPagination({ active, setActive }) {
 
   return (
     <div className="flex flex-row w-full items-center justify-between">
-      <IconButton className="p-4" size="sm" variant="outlined" onClick={prev}>
+      <Button
+        className="p-2 flex flex-row items-center justify-center gap-2 text-sm"
+        size="sm"
+        variant="outlined"
+        onClick={prev}
+      >
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
-      </IconButton>
-      <div className="w-full flex flex-row justify-between mx-4 text-lg">
         <p className="font-bold"> prev</p>
-        <p className="font-bold"> next</p>
-      </div>
-      <IconButton
-        className="p-4"
+      </Button>
+
+      <Button
+        className="p-2 flex flex-row items-center justify-center gap-2 text-sm"
         size="sm"
         variant="outlined"
         onClick={next}
         disabled={active === 1}
       >
+        <p
+          className="font-bold disabled:opacity-10"
+          onClick={next}
+          disabled={active === 1}
+        >
+          next
+        </p>
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-      </IconButton>
+      </Button>
     </div>
   );
 }

@@ -13,3 +13,11 @@ export const updateRecurringTask = (task_id, update) => {
     .patch(`/tasks/templates/${task_id}`, update)
     .then(({ data }) => {});
 };
+
+export const getTasksForSpecificDay = (patient_id, isoDate) => {
+  return peaceOfMindAPI
+    .get(`/patients/${patient_id}/tasks/${isoDate}`)
+    .then(({ data }) => {
+      return data;
+    });
+};
