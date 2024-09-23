@@ -6,10 +6,10 @@ import { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./components/Context/UserContext";
 import Header from "./components/Header/Header";
-import GuardianPatientViewDesktop from "./components/Guardian/GuardianPatientViewDesktop";
+import GuardianPatientViewDesktop from "./components/Patient/GuardianView/GuardianPatientViewDesktop";
 import CarerPatientView from "./components/Carer/CarerPatientView";
-import GuardianDayReview from "./components/Guardian/GuardianDayReview";
-import { GuardianPatientView } from "./components/Guardian/GuardianPatientView";
+import GuardianDayReview from "./components/Patient/GuardianView/GuardianDayView";
+import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
 
 function App() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTaskTemplatesByPatientId } from "../../axios/task.axios";
+import { getTaskTemplatesByPatientId } from "../../../axios/task.axios";
 import { EditRecurringTask } from "./EditRecurringTask";
 import React from "react";
 
@@ -106,7 +106,7 @@ export default function RepeatingTasksList({ patient_id }) {
                       <clipPath id="80e30fad60">
                         <path
                           d="M 0 0 L 37.007812 0 L 37.007812 37.007812 L 0 37.007812 Z M 0 0 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                     </defs>
@@ -215,7 +215,7 @@ export default function RepeatingTasksList({ patient_id }) {
                       <clipPath id="7f43d0afe4">
                         <path
                           d="M 0 4.238281 L 37 4.238281 L 37 33.105469 L 0 33.105469 Z M 0 4.238281 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                     </defs>
@@ -271,13 +271,13 @@ export default function RepeatingTasksList({ patient_id }) {
                       <clipPath id="fb9f8a5c12">
                         <path
                           d="M 0 0 L 37 0 L 37 35.527344 L 0 35.527344 Z M 0 0 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                       <clipPath id="865d190d5b">
                         <path
                           d="M 36 13 L 37.007812 13 L 37.007812 24 L 36 24 Z M 36 13 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                     </defs>
@@ -401,13 +401,13 @@ export default function RepeatingTasksList({ patient_id }) {
                       <clipPath id="15523dacc0">
                         <path
                           d="M 17 20 L 34.878906 20 L 34.878906 37.007812 L 17 37.007812 Z M 17 20 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                       <clipPath id="26af5e09b5">
                         <path
                           d="M 2.3125 0 L 31 0 L 31 37.007812 L 2.3125 37.007812 Z M 2.3125 0 "
-                          clip-rule="nonzero"
+                          clipRule="nonzero"
                         />
                       </clipPath>
                     </defs>

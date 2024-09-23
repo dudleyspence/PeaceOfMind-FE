@@ -11,16 +11,17 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
-import ProgressTab from "../Patient/PatientProgressTab";
+import ProgressTab from "../PatientTabs/PatientProgressTab";
 import { useParams } from "react-router-dom";
-import { getPatientByPatientId } from "../../axios/patient.axios";
+import { getPatientByPatientId } from "../../../axios/patient.axios";
 import { useState, useEffect } from "react";
-import PatientInfoCard from "../Patient/patientInfoCard";
-import SelectDate from "../Patient/SelectCareDay";
-import CarerInfoCard from "../Patient/PatientCarerInfoCard";
-import RepeatingTasksList from "../Patient/PatientCarePlanDesktop";
-import PatientCarePlanMobile from "../Patient/PatientCarePlanMobile";
+import PatientInfoCard from "../PatientTabs/PatientInfoCard";
+import SelectDate from "../PatientTabs/SelectCareDay";
+import CarerInfoCard from "../PatientTabs/PatientCarerInfoCard";
+import RepeatingTasksList from "./PatientCarePlanDesktop";
+import PatientCarePlanMobile from "./PatientCarePlanMobile";
 import GuardianPatientSettings from "./GuardianPatientSettings";
+import PatientCarePlanControls from "./PatientCarePlanControls";
 
 export function GuardianPatientView() {
   const { patient_id } = useParams();
@@ -62,6 +63,7 @@ export function GuardianPatientView() {
           desc: (
             <div className="p-2 flex flex-col">
               <CarerInfoCard carer={patient.carers[0]} />
+              <PatientCarePlanControls />
               <PatientCarePlanMobile patient_id={patient_id} />
             </div>
           ),
@@ -80,7 +82,7 @@ export function GuardianPatientView() {
     <Tabs value="profile">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
-          <Tab key={value} value={value} className="text-sm">
+          <Tab key={value} value={value} className="text-base">
             <div className="flex items-center gap-2">
               {React.createElement(icon, { className: "w-3 h-3" })}
               {label}

@@ -43,19 +43,19 @@ export default function PatientInfoCard({ patient }) {
                 <clipPath id="55a6c56226">
                   <path
                     d="M 1.179688 1 L 35.964844 1 L 35.964844 37 L 1.179688 37 Z M 1.179688 1 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
                 <clipPath id="260131a400">
                   <path
                     d="M 12.953125 12.953125 L 14.136719 12.953125 L 14.136719 14.136719 L 12.953125 14.136719 Z M 12.953125 12.953125 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
                 <clipPath id="97a8b2378f">
                   <path
                     d="M 13.542969 12.953125 C 13.21875 12.953125 12.953125 13.21875 12.953125 13.542969 C 12.953125 13.871094 13.21875 14.136719 13.542969 14.136719 C 13.871094 14.136719 14.136719 13.871094 14.136719 13.542969 C 14.136719 13.21875 13.871094 12.953125 13.542969 12.953125 Z M 13.542969 12.953125 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -102,7 +102,7 @@ export default function PatientInfoCard({ patient }) {
                 <clipPath id="263708f090">
                   <path
                     d="M 0 0 L 37.007812 0 L 37.007812 37 L 0 37 Z M 0 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -143,7 +143,7 @@ export default function PatientInfoCard({ patient }) {
                 <clipPath id="7f43d0afe4">
                   <path
                     d="M 0 4.238281 L 37 4.238281 L 37 33.105469 L 0 33.105469 Z M 0 4.238281 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>

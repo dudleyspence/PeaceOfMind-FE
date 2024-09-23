@@ -23,7 +23,7 @@ export default withMT({
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 });
 
 // fdf3e8

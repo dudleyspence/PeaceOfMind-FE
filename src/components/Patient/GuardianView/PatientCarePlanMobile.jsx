@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTaskTemplatesByPatientId } from "../../axios/task.axios";
+import { getTaskTemplatesByPatientId } from "../../../axios/task.axios";
 import { EditRecurringTask } from "./EditRecurringTask";
 
 export default function CarePlanMobile({ patient_id }) {
@@ -27,7 +27,9 @@ export default function CarePlanMobile({ patient_id }) {
     setTaskUpdates(false);
     getTaskTemplatesByPatientId(patient_id).then((tasks) => {
       tasks.forEach((task) => {
-        sortedTasks[task.category].push(task);
+        if (task.category) {
+          sortedTasks[task.category].push(task);
+        }
       });
       setIsLoading(false);
 
@@ -38,7 +40,7 @@ export default function CarePlanMobile({ patient_id }) {
   return isLoading ? (
     "loading"
   ) : (
-    <div className="bg-teal-800 p-3 flex flex-col gap-5 rounded-lg my-5">
+    <div className="bg-teal-800 p-3 flex flex-col gap-5 rounded-lg my-5 text-black">
       {repeatingTasks.Meals.length > 0 && (
         <ul id="Meals" className="bg-white p-5 rounded-lg shadow-lg">
           <div className="flex flex-row items-center gap-1 justify-start">
@@ -57,7 +59,7 @@ export default function CarePlanMobile({ patient_id }) {
                 <clipPath id="80e30fad60">
                   <path
                     d="M 0 0 L 37.007812 0 L 37.007812 37.007812 L 0 37.007812 Z M 0 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -163,7 +165,7 @@ export default function CarePlanMobile({ patient_id }) {
                 <clipPath id="7f43d0afe4">
                   <path
                     d="M 0 4.238281 L 37 4.238281 L 37 33.105469 L 0 33.105469 Z M 0 4.238281 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -216,13 +218,13 @@ export default function CarePlanMobile({ patient_id }) {
                 <clipPath id="fb9f8a5c12">
                   <path
                     d="M 0 0 L 37 0 L 37 35.527344 L 0 35.527344 Z M 0 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
                 <clipPath id="865d190d5b">
                   <path
                     d="M 36 13 L 37.007812 13 L 37.007812 24 L 36 24 Z M 36 13 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -337,13 +339,13 @@ export default function CarePlanMobile({ patient_id }) {
                 <clipPath id="15523dacc0">
                   <path
                     d="M 17 20 L 34.878906 20 L 34.878906 37.007812 L 17 37.007812 Z M 17 20 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
                 <clipPath id="26af5e09b5">
                   <path
                     d="M 2.3125 0 L 31 0 L 31 37.007812 L 2.3125 37.007812 Z M 2.3125 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>

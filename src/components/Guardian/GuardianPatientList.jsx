@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
-import { PatientProgressBar } from "../Patient/PatientProgressBar";
+import { PatientProgressBar } from "../Patient/PatientTabs/PatientProgressBar";
 import { useNavigate } from "react-router-dom";
 export default function GuardianPatientList() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
@@ -29,7 +29,7 @@ export default function GuardianPatientList() {
     "Loading patients"
   ) : (
     <div className="w-full">
-      <ul className="flex flex-col justify-center items-center">
+      <ul className="flex flex-col justify-center items-center text-black">
         <p className="text-center">Click below to check in with:</p>
 
         {patientsList.map((patient) => (
@@ -38,7 +38,7 @@ export default function GuardianPatientList() {
               handlePatientClick(patient._id);
             }}
             key={patient._id}
-            className="flex flex-row items-center justify-between gap-4 bg-white w-full p-5 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer"
+            className="flex flex-row items-center justify-between gap-4 bg-white w-full p-5 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer text-black"
           >
             <div>
               <p className="mb-3 font-bold">{patient.name}</p>

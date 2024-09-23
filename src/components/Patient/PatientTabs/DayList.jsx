@@ -15,7 +15,6 @@ export function DayList({ patient_id }) {
     for (let i = (active - 1) * 7; i < 7 * active; i++) {
       const date = new Date();
       date.setUTCDate(date.getUTCDate() - i);
-      date.setUTCHours(0, 0, 0, 0);
 
       const isoDate = date.toISOString();
       const humanReadableDate = date.toDateString();

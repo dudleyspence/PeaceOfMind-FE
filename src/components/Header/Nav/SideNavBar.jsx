@@ -120,7 +120,7 @@ export function SideNavBar() {
                 <clipPath id="3264b8d004">
                   <path
                     d="M 9.359375 0 L 36.382812 0 L 36.382812 36.511719 L 9.359375 36.511719 Z M 9.359375 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -138,6 +138,12 @@ export function SideNavBar() {
           </div>
 
           <List>
+            <ListItem onClick={handleGoToDashboard}>
+              <ListItemPrefix>
+                <UserCircleIcon className="h-5 w-5" />
+              </ListItemPrefix>
+              Dashboard
+            </ListItem>
             <Accordion
               open={open === 1}
               icon={
@@ -197,12 +203,7 @@ export function SideNavBar() {
                 />
               </ListItemSuffix>
             </ListItem>
-            <ListItem onClick={handleGoToDashboard}>
-              <ListItemPrefix>
-                <UserCircleIcon className="h-5 w-5" />
-              </ListItemPrefix>
-              Dashboard
-            </ListItem>
+
             <ListItem>
               <ListItemPrefix>
                 <Cog6ToothIcon className="h-5 w-5" />

@@ -44,7 +44,7 @@ export default function PatientCarerInfoCard({ carer }) {
                 <clipPath id="c5322551d6">
                   <path
                     d="M 0 3.367188 L 37 3.367188 L 37 30.753906 L 0 30.753906 Z M 0 3.367188 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
@@ -74,7 +74,7 @@ export default function PatientCarerInfoCard({ carer }) {
                 <clipPath id="263708f090">
                   <path
                     d="M 0 0 L 37.007812 0 L 37.007812 37 L 0 37 Z M 0 0 "
-                    clip-rule="nonzero"
+                    clipRule="nonzero"
                   />
                 </clipPath>
               </defs>
