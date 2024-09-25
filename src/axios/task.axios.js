@@ -21,3 +21,10 @@ export const getTasksForSpecificDay = (patient_id, isoDate) => {
       return data;
     });
 };
+
+export const postTask = (task) => {
+  console.log(task);
+  return peaceOfMindAPI.post(`/tasks`, task).then(({ data }) => {
+    console.log(data);
+  });
+};

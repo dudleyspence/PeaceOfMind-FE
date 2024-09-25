@@ -1,17 +1,23 @@
 import React from "react";
-import { Input, Option, Select, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  Input,
+  Option,
+  Select,
+  Typography,
+} from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
+import { postTask } from "../../../axios/task.axios";
+import { formatISO } from "date-fns";
 
-export function CreateRoutineTask() {
+export function CreateRoutineTask({ open, setOpen, patient }) {
   const [taskText, setTaskText] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskInterval, setTaskInterval] = useState("");
-  const [startDate, setStartDate] = useState();
-
-  console.log(startDate);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
@@ -25,36 +31,57 @@ export function CreateRoutineTask() {
     setTaskCategory(value);
   }
 
-  function handleUpdateTask() {
-    const update = {
+  function handlePostRoutineTask() {
+    console.log("posting");
+    const routineTask = {
       text: taskText,
+      isDaySpecific: false,
       category: taskCategory,
       repeatInterval: taskInterval,
+      startDate: formatISO(startDate),
+      patient: patient._id,
+      carer: patient.carers[0]._id,
     };
-    updateRecurringTask(task._id, update).then(() => {
-      setTaskUpdates(true);
+    if (endDate) {
+      routineTask.repeatEndDate = endDate;
+    }
+    const task = { taskTemplate: routineTask };
+    postTask(task).then(() => {
       setOpen(!open);
     });
   }
 
-  const handleOpen = () => setOpen(!open);
-  const [open, setOpen] = React.useState(false);
+  function handleClear() {
+    setTaskText("");
+    setTaskCategory(null);
+    setTaskInterval(null);
+    setStartDate(null);
+    setEndDate(null);
+  }
+
+  function handleStartDateChange(selectedDate) {
+    setStartDate(selectedDate);
+    if (selectedDate && endDate && selectedDate > endDate) {
+      setEndDate(null);
+    }
+  }
 
   return (
     <>
-      <div className="space-y-4 pb-6">
+      <form className="space-y-4 pb-2 overflow-scroll">
         <div>
           <Typography
-            variant="small"
+            variant="h6"
             color="blue-gray"
             className="mb-2 text-left font-medium"
           >
-            Task
+            Task*
           </Typography>
           <Input
+            required={true}
             onChange={handleTextChange}
             color="gray"
-            size="lg"
+            size="md"
             name="name"
             value={taskText}
             className="
@@ -71,13 +98,15 @@ export function CreateRoutineTask() {
         </div>
         <div>
           <Typography
-            variant="small"
+            variant="h6"
             color="blue-gray"
             className="mb-2 text-left font-medium"
           >
-            Category
+            Category*
           </Typography>
           <Select
+            required={true}
+            size="md"
             onChange={handleCategoryChange}
             className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
             placeholder="1"
@@ -95,13 +124,14 @@ export function CreateRoutineTask() {
         </div>
         <div>
           <Typography
-            variant="small"
+            variant="h6"
             color="blue-gray"
             className="mb-2 text-left font-medium"
           >
-            Frequency
+            Frequency*
           </Typography>
           <Select
+            required={true}
             onChange={handleFrequencyChange}
             className="!w-full !border-[1.5px] !border-blue-gray-200/90 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
             placeholder="1"
@@ -116,14 +146,25 @@ export function CreateRoutineTask() {
             <Option value="Monthly">Monthly</Option>
           </Select>
         </div>
+
         <div>
+          <Typography
+            variant="h6"
+            color="blue-gray"
+            className="mb-2 text-left font-medium"
+          >
+            Routine Start Date*
+          </Typography>
           <ReactDatePicker
+            required={true}
             selected={startDate}
-            onChange={(selectedDate) => setStartDate(selectedDate)}
+            minDate={new Date()}
+            onChange={(selectedDate) => handleStartDateChange(selectedDate)}
+            dateFormat="PPP"
             customInput={
               <Input
-                label="Routine Start Date"
-                value={startDate ? format(startDate, "ppp") : ""}
+                label="Select Date"
+                value={startDate ? startDate : ""}
                 style={{ fontSize: "12px" }}
               />
             }
@@ -133,13 +174,23 @@ export function CreateRoutineTask() {
           />
         </div>
         <div>
+          <Typography
+            variant="h6"
+            color="blue-gray"
+            className="mb-2 text-left font-medium"
+          >
+            Routine End Date*
+          </Typography>
           <ReactDatePicker
-            selected={startDate}
-            onChange={(selectedDate) => setStartDate(selectedDate)}
+            disabled={!startDate}
+            selected={endDate}
+            minDate={startDate + 1}
+            onChange={(selectedDate) => setEndDate(selectedDate)}
+            dateFormat="PPP"
             customInput={
               <Input
-                label="Routine End Date"
-                value={startDate ? format(startDate, "ppp") : ""}
+                label="Select Date"
+                value={endDate ? endDate : ""}
                 style={{ fontSize: "12px" }}
               />
             }
@@ -148,7 +199,15 @@ export function CreateRoutineTask() {
             )}
           />
         </div>
-      </div>
+        <div className="flex flex-row justify-evenly">
+          <Button onClick={handleClear} className="text-sm">
+            Clear
+          </Button>
+          <Button onClick={handlePostRoutineTask} className="text-sm">
+            Submit
+          </Button>
+        </div>
+      </form>
     </>
   );
 }

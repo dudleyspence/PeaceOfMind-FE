@@ -18,7 +18,6 @@ import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
 import CarerInfoCard from "../PatientTabs/PatientCarerInfoCard";
-import RepeatingTasksList from "./PatientCarePlanDesktop";
 import PatientCarePlanMobile from "./PatientCarePlanMobile";
 import GuardianPatientSettings from "./GuardianPatientSettings";
 import PatientCarePlanControls from "./PatientCarePlanControls";
@@ -63,7 +62,7 @@ export function GuardianPatientView() {
           desc: (
             <div className="p-2 flex flex-col">
               <CarerInfoCard carer={patient.carers[0]} />
-              <PatientCarePlanControls />
+              <PatientCarePlanControls patient={patient} />
               <PatientCarePlanMobile patient_id={patient_id} />
             </div>
           ),
@@ -78,7 +77,9 @@ export function GuardianPatientView() {
     });
   }, [patient_id]);
 
-  return (
+  return isLoading ? (
+    "loading"
+  ) : (
     <Tabs value="profile">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (

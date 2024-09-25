@@ -19,24 +19,32 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { CreateRoutineTask } from "./CreateRoutineTask";
+import { CreateDaySpecificTask } from "./CreateDaySpecificTask";
 
-export function CreateTaskContainer() {
+export function CreateTaskContainer({ patient }) {
+  const [open, setOpen] = React.useState(false);
   const data = [
     {
       label: "Routine Task",
       value: "Routine",
-      desc: <CreateRoutineTask />,
+      desc: (
+        <CreateRoutineTask open={open} setOpen={setOpen} patient={patient} />
+      ),
     },
     {
       label: "Day-Specific Task",
       value: "DaySpecific",
-      desc: `Because it's about motivating the doers. Because I'm here
-      to follow my dreams and inspire other people to follow their dreams, too.`,
+      desc: (
+        <CreateDaySpecificTask
+          open={open}
+          setOpen={setOpen}
+          patient={patient}
+        />
+      ),
     },
   ];
 
   const handleOpen = () => setOpen(!open);
-  const [open, setOpen] = React.useState(false);
 
   return (
     <>
@@ -47,7 +55,7 @@ export function CreateTaskContainer() {
         size="sm"
         open={open}
         handler={handleOpen}
-        className="p-4 overflow-visible"
+        className="p-4 overflow-visible !max-h-[95vh]"
       >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h4" color="blue-gray">
@@ -62,26 +70,15 @@ export function CreateTaskContainer() {
             <XMarkIcon className="h-4 w-4 stroke-2" />
           </IconButton>
         </DialogHeader>
-        <Tabs
-          id="custom-animation"
-          value="Routine"
-          className="overflow-visible"
-        >
-          <TabsHeader>
+        <Tabs value="Routine" className="overflow-visible">
+          <TabsHeader className="z-0">
             {data.map(({ label, value }) => (
               <Tab key={value} value={value}>
                 {label}
               </Tab>
             ))}
           </TabsHeader>
-          <TabsBody
-            className="overflow-visible"
-            animate={{
-              initial: { y: 250 },
-              mount: { y: 0 },
-              unmount: { y: 250 },
-            }}
-          >
+          <TabsBody className="overflow-visible">
             {data.map(({ value, desc }) => (
               <TabPanel key={value} value={value} className="overflow-visible">
                 {desc}
