@@ -28,3 +28,9 @@ export const postTask = (task) => {
     console.log(data);
   });
 };
+
+export const getScheduledTasks = (patient_id) => {
+  return peaceOfMindAPI
+    .get(`/patients/${patient_id}/scheduled-tasks`)
+    .then(({ data }) => data);
+};

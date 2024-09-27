@@ -17,16 +17,17 @@ import { getPatientByPatientId } from "../../../axios/patient.axios";
 import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
-import CarerInfoCard from "../PatientTabs/PatientCarerInfoCard";
-import PatientCarePlanMobile from "./PatientCarePlanMobile";
 import GuardianPatientSettings from "./GuardianPatientSettings";
-import PatientCarePlanControls from "./PatientCarePlanControls";
+import CarePlan from "../../../assets/patient/CarePlan";
+import PatientComments from "./PatientComments";
+import CarePlanPage from "./CarePlanPage/CarePlanPage";
 
 export function GuardianPatientView() {
   const { patient_id } = useParams();
   const [patient, setPatient] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+
   const [carer, setCarer] = useState(() => {
     if (patient) {
       return patient.carers[0];
@@ -50,7 +51,10 @@ export function GuardianPatientView() {
           desc: (
             <div className="p-2 flex flex-col gap-5 rounded-lg">
               <PatientInfoCard patient={patient} />
-              <ProgressTab patient_id={patient_id} />
+              <div className="cursor-pointer hover:shadow-lg">
+                <ProgressTab patient_id={patient_id} />
+              </div>
+              <PatientComments patient_id={patient_id} />
               <SelectDate patient_id={patient_id} />
             </div>
           ),
@@ -58,14 +62,8 @@ export function GuardianPatientView() {
         {
           label: "Care Plan",
           value: "Care",
-          icon: Square3Stack3DIcon,
-          desc: (
-            <div className="p-2 flex flex-col">
-              <CarerInfoCard carer={patient.carers[0]} />
-              <PatientCarePlanControls patient={patient} />
-              <PatientCarePlanMobile patient_id={patient_id} />
-            </div>
-          ),
+          icon: CarePlan,
+          desc: <CarePlanPage patient={patient} />,
         },
         {
           label: "Settings",
@@ -83,9 +81,9 @@ export function GuardianPatientView() {
     <Tabs value="profile">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
-          <Tab key={value} value={value} className="text-base">
+          <Tab key={value} value={value} className="text-base font-bold">
             <div className="flex items-center gap-2">
-              {React.createElement(icon, { className: "w-3 h-3" })}
+              {React.createElement(icon, { className: "w-4 h-4" })}
               {label}
             </div>
           </Tab>
@@ -93,7 +91,11 @@ export function GuardianPatientView() {
       </TabsHeader>
       <TabsBody>
         {data.map(({ value, desc }) => (
-          <TabPanel key={value} value={value} className="p-0 my-5">
+          <TabPanel
+            key={value}
+            value={value}
+            className="p-0 my-5 flex justify-center"
+          >
             {desc}
           </TabPanel>
         ))}

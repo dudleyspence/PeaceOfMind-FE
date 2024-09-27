@@ -31,7 +31,7 @@ export default function PatientProgressTab({
 
   return (
     <div
-      className="bg-green-200 p-5 rounded-lg max-w-96 text-black"
+      className="bg-green-200 p-5 rounded-lg max-w-96 text-black w-full"
       onClick={handleClick}
     >
       <h1>Progress for {day}</h1>

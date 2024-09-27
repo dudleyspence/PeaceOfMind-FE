@@ -1,18 +1,18 @@
 import React from "react";
-import {
-  Button,
-  Input,
-  Option,
-  Select,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, Input, Alert, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { postTask } from "../../../axios/task.axios";
+import { postTask } from "../../../../axios/task.axios";
 import { formatISO } from "date-fns";
 
-export function CreateDaySpecificTask({ open, setOpen, patient }) {
+export function CreateDaySpecificTask({
+  open,
+  setOpen,
+  patient,
+  setShowAlert,
+  setTaskUpdates,
+}) {
   const [taskText, setTaskText] = useState("");
   const [scheduledDate, setScheduledDate] = useState(null);
 
@@ -21,27 +21,34 @@ export function CreateDaySpecificTask({ open, setOpen, patient }) {
   }
 
   function handlePostDaySpecificTask() {
-    console.log("posting");
-    const template = {
-      text: taskText,
-      isDaySpecific: true,
-      patient: patient._id,
-      carer: patient.carers[0]._id,
-      guardian: patient.guardians[0]._id,
-    };
-    const instance = {
-      scheduleDate: formatISO(scheduledDate),
-      carer: patient.carers[0]._id,
-      patient: patient._id,
-    };
-    const task = { taskTemplate: template, taskInstance: instance };
-    postTask(task).then(() => {
-      setOpen(!open);
-    });
+    if (taskText && scheduledDate) {
+      setShowAlert(false);
+      const template = {
+        text: taskText,
+        isDaySpecific: true,
+        nextInstanceDate: formatISO(scheduledDate),
+        patient: patient._id,
+        carer: patient.carers[0]._id,
+        guardian: patient.guardians[0]._id,
+      };
+      const instance = {
+        scheduleDate: formatISO(scheduledDate),
+        carer: patient.carers[0]._id,
+        patient: patient._id,
+      };
+      const task = { taskTemplate: template, taskInstance: instance };
+      postTask(task).then(() => {
+        setTaskUpdates(true);
+        setOpen(!open);
+      });
+    } else {
+      setShowAlert(true);
+    }
   }
 
   function handleClear() {
     setTaskText("");
+    showAlert(false);
     setScheduledDate(null);
   }
 
@@ -66,7 +73,8 @@ export function CreateDaySpecificTask({ open, setOpen, patient }) {
             className="
               !border-t-gray-600
               border-gray-600
-              focus:!border-gray-900"
+              focus:!border-gray-900
+              text-[13px]"
             containerProps={{
               className: "!min-w-full",
             }}

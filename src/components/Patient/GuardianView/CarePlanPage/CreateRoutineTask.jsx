@@ -4,15 +4,22 @@ import {
   Input,
   Option,
   Select,
+  Alert,
   Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { postTask } from "../../../axios/task.axios";
+import { postTask } from "../../../../axios/task.axios";
 import { formatISO } from "date-fns";
 
-export function CreateRoutineTask({ open, setOpen, patient }) {
+export function CreateRoutineTask({
+  open,
+  setOpen,
+  patient,
+  setShowAlert,
+  setTaskUpdates,
+}) {
   const [taskText, setTaskText] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskInterval, setTaskInterval] = useState("");
@@ -33,25 +40,33 @@ export function CreateRoutineTask({ open, setOpen, patient }) {
 
   function handlePostRoutineTask() {
     console.log("posting");
-    const routineTask = {
-      text: taskText,
-      isDaySpecific: false,
-      category: taskCategory,
-      repeatInterval: taskInterval,
-      startDate: formatISO(startDate),
-      patient: patient._id,
-      carer: patient.carers[0]._id,
-    };
-    if (endDate) {
-      routineTask.repeatEndDate = endDate;
+    if (taskText && taskCategory && taskInterval && startDate) {
+      setShowAlert(false);
+      const routineTask = {
+        text: taskText,
+        isDaySpecific: false,
+        category: taskCategory,
+        repeatInterval: taskInterval,
+        nextInstanceDate: formatISO(startDate),
+        startDate: formatISO(startDate),
+        patient: patient._id,
+        carer: patient.carers[0]._id,
+      };
+      if (endDate) {
+        routineTask.repeatEndDate = endDate;
+      }
+      const task = { taskTemplate: routineTask };
+      postTask(task).then(() => {
+        setTaskUpdates(true);
+        setOpen(!open);
+      });
+    } else {
+      setShowAlert(true);
     }
-    const task = { taskTemplate: routineTask };
-    postTask(task).then(() => {
-      setOpen(!open);
-    });
   }
 
   function handleClear() {
+    setShowAlert(false);
     setTaskText("");
     setTaskCategory(null);
     setTaskInterval(null);
@@ -68,7 +83,7 @@ export function CreateRoutineTask({ open, setOpen, patient }) {
 
   return (
     <>
-      <form className="space-y-4 pb-2 overflow-scroll">
+      <form className="space-y-4 pb-2">
         <div>
           <Typography
             variant="h6"
@@ -87,7 +102,8 @@ export function CreateRoutineTask({ open, setOpen, patient }) {
             className="
               !border-t-gray-600
               border-gray-600
-              focus:!border-gray-900"
+              focus:!border-gray-900
+              text-[14px]"
             containerProps={{
               className: "!min-w-full",
             }}
@@ -108,18 +124,28 @@ export function CreateRoutineTask({ open, setOpen, patient }) {
             required={true}
             size="md"
             onChange={handleCategoryChange}
-            className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
+            className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary text-[14px]"
             placeholder="1"
             value={taskCategory}
             labelProps={{
               className: "hidden",
             }}
           >
-            <Option value="Meals">Meals</Option>
-            <Option value="Medical">Medical</Option>
-            <Option value="Hygiene">Hygiene</Option>
-            <Option value="Exercise">Exercise</Option>
-            <Option value="Additional">Additional</Option>
+            <Option className="text-[12px]" value="Meals">
+              Meals
+            </Option>
+            <Option className="text-[12px]" value="Medical">
+              Medical
+            </Option>
+            <Option className="text-[12px]" value="Hygiene">
+              Hygiene
+            </Option>
+            <Option className="text-[12px]" value="Exercise">
+              Exercise
+            </Option>
+            <Option className="text-[12px]" value="Additional">
+              Additional
+            </Option>
           </Select>
         </div>
         <div>
@@ -140,10 +166,18 @@ export function CreateRoutineTask({ open, setOpen, patient }) {
               className: "hidden",
             }}
           >
-            <Option value="Daily">Daily</Option>
-            <Option value="Weekly">Weekly</Option>
-            <Option value="Biweekly">Biweekly</Option>
-            <Option value="Monthly">Monthly</Option>
+            <Option className="text-[12px]" value="Daily">
+              Daily
+            </Option>
+            <Option className="text-[12px]" value="Weekly">
+              Weekly
+            </Option>
+            <Option className="text-[12px]" value="Biweekly">
+              Biweekly
+            </Option>
+            <Option className="text-[12px]" value="Monthly">
+              Monthly
+            </Option>
           </Select>
         </div>
 

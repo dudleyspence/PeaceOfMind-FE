@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPatientByPatientId } from "../../../axios/patient.axios";
+import { getPatientByPatientId } from "../../axios/patient.axios";
 
-import PatientInfoCard from "../PatientTabs/PatientInfoCard";
-import CarerInfoCard from "../PatientTabs/PatientCarerInfoCard";
-import SelectDate from "../PatientTabs/SelectCareDay";
+import PatientInfoCard from "../Patient/PatientTabs/PatientInfoCard";
+import CarerInfoCard from "../Patient/GuardianView/CarePlanPage/PatientCarerInfoCard";
+import SelectDate from "../Patient/PatientTabs/SelectCareDay";
 import RepeatingTasksList from "./PatientCarePlanDesktop";
-import ProgressTab from "../PatientTabs/PatientProgressTab";
+import ProgressTab from "../Patient/PatientTabs/PatientProgressTab";
 
 export default function GuardianPatientViewDesktop() {
   const [patient, setPatient] = useState(null);

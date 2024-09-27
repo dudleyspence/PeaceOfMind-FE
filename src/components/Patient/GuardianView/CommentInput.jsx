@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../Context/UserContext";
 import { postComment } from "../../../axios/comments.axios";
 
-export function CommentInput({ patient_id, isoDate, setComments, comments }) {
+export function CommentInput({ patient_id, setComments, comments }) {
   const [commentInput, setCommentInput] = useState("");
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
   const [author] = useState(() => {
@@ -22,18 +22,21 @@ export function CommentInput({ patient_id, isoDate, setComments, comments }) {
   });
 
   function handlePostComment() {
-    postComment(commentInput, patient_id, isoDate, author, authorType).then(
-      (comment) => {
-        console.log("success", comment);
-        setCommentInput("");
-        setComments([...comments, comment]);
-      }
-    );
+    if (commentInput !== "") {
+      postComment(commentInput, patient_id, author, authorType).then(
+        (comment) => {
+          console.log("success", comment);
+          setCommentInput("");
+          setComments([...comments, comment]);
+        }
+      );
+    }
   }
 
   return (
     <div className="flex w-full flex-row items-center gap-2 rounded-lg border border-gray-900/10 bg-white p-2 mt-5">
       <Textarea
+        required
         rows={1}
         resize={true}
         placeholder="Your Message"

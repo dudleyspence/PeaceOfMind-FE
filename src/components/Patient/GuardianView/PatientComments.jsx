@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getCommentsForSingleDay } from "../../../axios/comments.axios";
+import { getPatientComments } from "../../../axios/comments.axios";
 import { CommentInput } from "./CommentInput";
 
-export default function PatientComments({ patient_id, isoDate }) {
+export default function PatientComments({ patient_id }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    getCommentsForSingleDay(patient_id, isoDate).then((comments) => {
+    getPatientComments(patient_id).then((comments) => {
       setComments(comments);
       setIsLoading(false);
     });
@@ -17,7 +17,7 @@ export default function PatientComments({ patient_id, isoDate }) {
   return isLoading ? (
     "Loading"
   ) : (
-    <div className="text-base bg-teal-100 p-3 my-3 rounded-lg shadow-xl">
+    <div className="text-base bg-teal-100 p-3 rounded-lg shadow-xl w-full max-w-96">
       <div className="max-h-56 overflow-scroll">
         {comments.length > 0
           ? comments.map((comment) => (
@@ -44,7 +44,6 @@ export default function PatientComments({ patient_id, isoDate }) {
       </div>
       <CommentInput
         patient_id={patient_id}
-        isoDate={isoDate}
         comments={comments}
         setComments={setComments}
       />
