@@ -6,9 +6,10 @@ import { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./components/Context/UserContext";
 import Header from "./components/Header/Header";
-import GuardianPatientView from "./components/Guardian/GuardianPatientView";
+import GuardianPatientViewDesktop from "./components/desktop/GuardianPatientViewDesktop";
 import CarerPatientView from "./components/Carer/CarerPatientView";
-import GuardianPatientDayView from "./components/Guardian/GuardianPatientDayView";
+import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
+import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
 
 function App() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
@@ -30,7 +31,6 @@ function App() {
     "Loading"
   ) : (
     <div className="bg-backgroundCream min-h-screen box-border px-3">
-      {console.log(userLoggedIn)}
       {(guardianLoggedIn || carerLoggedIn) && <Header />}
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -62,7 +62,7 @@ function App() {
           path="/patient/:patient_id/:isoDate"
           element={
             guardianLoggedIn ? (
-              <GuardianPatientDayView />
+              <GuardianDayReview />
             ) : carerLoggedIn ? (
               <Navigate to="/dashboard" />
             ) : (

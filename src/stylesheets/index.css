@@ -9,3 +9,16 @@ body {
   padding: 0;
   height: 100%;
 }
+
+.react-datepicker-wrapper {
+  width: 100% !important;
+}
+
+.react-datepicker {
+  display: flex;
+  flex-direction: row;
+}
+
+.relative.w-full.min-w-\[200px\].h-10 {
+  min-width: unset !important;
+}

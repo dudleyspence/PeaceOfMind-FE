@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPatientByPatientId } from "../../axios/patient.axios";
 
-import PatientInfoCard from "../Patient/patientInfoCard";
-import CarerInfoCard from "../Patient/CarerInfoCard";
-import SelectDate from "../Patient/SelectDate";
-import RepeatingTasksList from "./RepeatingTasksList";
-import ProgressTab from "../Patient/ProgressTab";
+import PatientInfoCard from "../Patient/PatientTabs/PatientInfoCard";
+import CarerInfoCard from "../Patient/GuardianView/CarePlanPage/PatientCarerInfoCard";
+import SelectDate from "../Patient/PatientTabs/SelectCareDay";
+import RepeatingTasksList from "./PatientCarePlanDesktop";
+import ProgressTab from "../Patient/PatientTabs/PatientProgressTab";
 
-export default function GuardianPatientView() {
+export default function GuardianPatientViewDesktop() {
   const [patient, setPatient] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [carer, setCarer] = useState(() => {
@@ -24,12 +24,12 @@ export default function GuardianPatientView() {
   useEffect(() => {
     setIsLoading(true);
     getPatientByPatientId(patient_id).then((patient) => {
-      console.log(patient);
       setIsLoading(false);
       setPatient(patient);
       setCarer(patient.carers[0]);
     });
-  }, []);
+  }, [patient_id]);
+
   return isLoading ? (
     "Loading"
   ) : (
