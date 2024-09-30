@@ -14,54 +14,73 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
 import {
   deleteTaskTemplate,
+  deleteTaskInstance,
+  updateTaskInsance,
   updateTaskTemplate,
-} from "../../../../axios/index.axios";
+} from "../../../../axios/task.axios";
+import { formatISO } from "date-fns";
 
-export function EditRecurringTask({ task, setTaskUpdates }) {
+export function EditScheduledTask({ task, setTaskUpdates }) {
   const [open, setOpen] = useState(false);
-  const [taskText, setTaskText] = useState(task.text);
-  const [taskCategory, setTaskCategory] = useState(task.category);
-  const [taskInterval, setTaskInterval] = useState(task.repeatInterval);
-  const [taskNotes, setTaskNotes] = useState(task.notes ? task.notes : "");
-
-  function handleTextChange(event) {
-    setTaskText(event.target.value);
-  }
+  const [taskText, setTaskText] = useState(task.template.text);
+  const [scheduleDate, setScheduleDate] = useState(
+    task.scheduleDate ? new Date(task.scheduleDate) : ""
+  );
+  const [taskNotes, setTaskNotes] = useState(
+    task.template.notes ? task.template.notes : ""
+  );
 
   function handleNotesChange(event) {
     setTaskNotes(event.target.value);
   }
 
-  function handleFrequencyChange(value) {
-    setTaskInterval(value);
+  function handleTextChange(event) {
+    setTaskText(event.target.value);
   }
 
-  function handleCategoryChange(value) {
-    setTaskCategory(value);
+  function handleScheduleChange(value) {
+    setScheduleDate(value);
   }
 
   function handleDeleteTask() {
-    deleteTaskTemplate(task._id).then(() => {
-      setTaskUpdates(true);
-      setOpen(!open);
-    });
+    deleteTaskInstance(task._id)
+      .then(() => {
+        return deleteTaskTemplate(task.template._id);
+      })
+      .then(() => {
+        setTaskUpdates(true);
+        console.log("Task Deleted");
+        setOpen(!open);
+      });
   }
 
   function handleUpdateTask() {
-    const update = {
+    const templateUpdate = {
       text: taskText,
-      category: taskCategory,
-      repeatInterval: taskInterval,
     };
+    const instanceUpdate = {
+      scheduleDate: formatISO(scheduleDate),
+    };
+
     if (taskNotes) {
-      update.notes = taskNotes;
+      templateUpdate.notes = taskNotes;
     }
-    updateTaskTemplate(task._id, update).then(() => {
-      setTaskUpdates(true);
-      setOpen(!open);
-    });
+
+    updateTaskTemplate(task.template._id, templateUpdate)
+      .then((update) => {
+        console.log(update);
+        return updateTaskInsance(task._id, instanceUpdate);
+      })
+      .then((update) => {
+        console.log(update);
+        setTaskUpdates(true);
+        setOpen(!open);
+      });
   }
 
   const handleOpen = () => setOpen(!open);
@@ -128,8 +147,8 @@ export function EditRecurringTask({ task, setTaskUpdates }) {
         <DialogBody className="space-y-4 pb-6">
           <div>
             <Typography
-              variant="small"
-              color="blue-gray"
+              variant="h6"
+              color="black"
               className="mb-2 text-left font-medium"
             >
               Task
@@ -143,7 +162,8 @@ export function EditRecurringTask({ task, setTaskUpdates }) {
               className="
               !border-t-gray-600
               border-gray-600
-              focus:!border-gray-900 !text-[15px]"
+              focus:!border-gray-900
+              !text-[16px]"
               containerProps={{
                 className: "!min-w-full",
               }}
@@ -152,52 +172,34 @@ export function EditRecurringTask({ task, setTaskUpdates }) {
               }}
             />
           </div>
+
           <div>
             <Typography
-              variant="small"
-              color="blue-gray"
+              variant="h6"
+              color="black"
               className="mb-2 text-left font-medium"
             >
-              Category
+              Scheduled Date
             </Typography>
-            <Select
-              onChange={handleCategoryChange}
-              className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary !text-[15px]"
-              placeholder="1"
-              value={taskCategory}
-              labelProps={{
-                className: "hidden",
-              }}
-            >
-              <Option value="Meals">Meals</Option>
-              <Option value="Medical">Medical</Option>
-              <Option value="Hygiene">Hygiene</Option>
-              <Option value="Exercise">Exercise</Option>
-              <Option value="Additional">Additional</Option>
-            </Select>
-          </div>
-          <div>
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="mb-2 text-left font-medium"
-            >
-              Frequency
-            </Typography>
-            <Select
-              onChange={handleFrequencyChange}
-              className="!w-full !border-[1.5px] !border-blue-gray-200/90 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary !text-[15px]"
-              placeholder="1"
-              value={taskInterval}
-              labelProps={{
-                className: "hidden",
-              }}
-            >
-              <Option value="Daily">Daily</Option>
-              <Option value="Weekly">Weekly</Option>
-              <Option value="Biweekly">Biweekly</Option>
-              <Option value="Monthly">Monthly</Option>
-            </Select>
+            <ReactDatePicker
+              required={true}
+              showTimeSelect
+              timeIntervals={10}
+              selected={scheduleDate}
+              minDate={addDays(new Date(), 1)}
+              onChange={(selectedDate) => handleScheduleChange(selectedDate)}
+              dateFormat="PPPp"
+              customInput={
+                <Input
+                  label="Select Date"
+                  value={scheduleDate ? scheduleDate : ""}
+                  style={{ fontSize: "16px" }}
+                />
+              }
+              popperContainer={({ children }) => (
+                <div className="z-[9999]">{children}</div>
+              )}
+            />
           </div>
           <div>
             <Typography

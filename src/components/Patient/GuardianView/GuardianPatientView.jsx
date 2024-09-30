@@ -17,7 +17,7 @@ import { getPatientByPatientId } from "../../../axios/patient.axios";
 import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
-import GuardianPatientSettings from "./GuardianPatientSettings";
+import GuardianPatientSettings from "./SettingsPage/GuardianPatientSettings";
 import CarePlan from "../../../assets/patient/CarePlan";
 import PatientComments from "./PatientComments";
 import CarePlanPage from "./CarePlanPage/CarePlanPage";
@@ -69,7 +69,7 @@ export function GuardianPatientView() {
           label: "Settings",
           value: "settings",
           icon: Cog6ToothIcon,
-          desc: <GuardianPatientSettings />,
+          desc: <GuardianPatientSettings patient={patient} />,
         },
       ]);
     });

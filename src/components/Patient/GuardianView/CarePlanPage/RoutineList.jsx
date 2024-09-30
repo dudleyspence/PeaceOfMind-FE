@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getTaskTemplatesByPatientId } from "../../../../axios/task.axios";
 import { EditRecurringTask } from "./EditRecurringTask";
 import { format } from "date-fns";
+import ViewTaskNotes from "./ViewTaskNotes";
 
 export default function RoutineList({
   patient_id,
@@ -153,6 +154,9 @@ export default function RoutineList({
                 </p>
               )}
               <p>{task.text}</p>
+
+              {task.notes && <ViewTaskNotes notes={task.notes} />}
+
               <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
@@ -211,6 +215,8 @@ export default function RoutineList({
                 </p>
               )}
               <p>{task.text}</p>
+              {task.notes && <ViewTaskNotes notes={task.notes} />}
+
               <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
@@ -294,6 +300,8 @@ export default function RoutineList({
                 </p>
               )}
               <p>{task.text}</p>
+              {task.notes && <ViewTaskNotes notes={task.notes} />}
+
               <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
@@ -342,6 +350,8 @@ export default function RoutineList({
                 </p>
               )}
               <p>{task.text}</p>
+              {task.notes && <ViewTaskNotes notes={task.notes} />}
+
               <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
@@ -431,6 +441,8 @@ export default function RoutineList({
                 </p>
               )}
               <p>{task.text}</p>
+              {task.notes && <ViewTaskNotes notes={task.notes} />}
+
               <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}

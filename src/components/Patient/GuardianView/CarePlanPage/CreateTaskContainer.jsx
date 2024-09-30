@@ -64,7 +64,7 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
         size="sm"
         open={open}
         handler={handleOpen}
-        className="p-4 overflow-scroll !max-h-[95vh]"
+        className="p-4 overflow-visible !max-h-[95vh]"
       >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h4" color="blue-gray">
@@ -87,9 +87,9 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
               </Tab>
             ))}
           </TabsHeader>
-          <TabsBody className="overflow-scroll">
+          <TabsBody className="overflow-visible">
             {data.map(({ value, desc }) => (
-              <TabPanel key={value} value={value} className="overflow-scroll">
+              <TabPanel key={value} value={value} className="overflow-visible">
                 {desc}
                 {showAlert && (
                   <Alert

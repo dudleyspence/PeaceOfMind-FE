@@ -6,6 +6,7 @@ import {
   Select,
   Alert,
   Typography,
+  Textarea,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
@@ -23,11 +24,16 @@ export function CreateRoutineTask({
   const [taskText, setTaskText] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskInterval, setTaskInterval] = useState("");
+  const [taskNotes, setTaskNotes] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
+  }
+
+  function handleNotesChange(event) {
+    setTaskNotes(event.target.value);
   }
 
   function handleFrequencyChange(value) {
@@ -55,6 +61,10 @@ export function CreateRoutineTask({
       if (endDate) {
         routineTask.repeatEndDate = endDate;
       }
+      if (taskNotes) {
+        routineTask.notes = taskNotes;
+      }
+
       const task = { taskTemplate: routineTask };
       postTask(task).then(() => {
         setTaskUpdates(true);
@@ -72,6 +82,7 @@ export function CreateRoutineTask({
     setTaskInterval(null);
     setStartDate(null);
     setEndDate(null);
+    setTaskNotes("");
   }
 
   function handleStartDateChange(selectedDate) {
@@ -103,7 +114,7 @@ export function CreateRoutineTask({
               !border-t-gray-600
               border-gray-600
               focus:!border-gray-900
-              text-[14px]"
+              !text-[14px]"
             containerProps={{
               className: "!min-w-full",
             }}
@@ -112,100 +123,130 @@ export function CreateRoutineTask({
             }}
           />
         </div>
-        <div>
-          <Typography
-            variant="h6"
-            color="blue-gray"
-            className="mb-2 text-left font-medium"
-          >
-            Category*
-          </Typography>
-          <Select
-            required={true}
-            size="md"
-            onChange={handleCategoryChange}
-            className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary text-[14px]"
-            placeholder="1"
-            value={taskCategory}
-            labelProps={{
-              className: "hidden",
-            }}
-          >
-            <Option className="text-[12px]" value="Meals">
-              Meals
-            </Option>
-            <Option className="text-[12px]" value="Medical">
-              Medical
-            </Option>
-            <Option className="text-[12px]" value="Hygiene">
-              Hygiene
-            </Option>
-            <Option className="text-[12px]" value="Exercise">
-              Exercise
-            </Option>
-            <Option className="text-[12px]" value="Additional">
-              Additional
-            </Option>
-          </Select>
-        </div>
-        <div>
-          <Typography
-            variant="h6"
-            color="blue-gray"
-            className="mb-2 text-left font-medium"
-          >
-            Frequency*
-          </Typography>
-          <Select
-            required={true}
-            onChange={handleFrequencyChange}
-            className="!w-full !border-[1.5px] !border-blue-gray-200/90 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary"
-            placeholder="1"
-            value={taskInterval}
-            labelProps={{
-              className: "hidden",
-            }}
-          >
-            <Option className="text-[12px]" value="Daily">
-              Daily
-            </Option>
-            <Option className="text-[12px]" value="Weekly">
-              Weekly
-            </Option>
-            <Option className="text-[12px]" value="Biweekly">
-              Biweekly
-            </Option>
-            <Option className="text-[12px]" value="Monthly">
-              Monthly
-            </Option>
-          </Select>
+        <div className="flex flex-row justify-between">
+          <div className="w-[45%]">
+            <Typography
+              variant="h6"
+              color="blue-gray"
+              className="mb-2 text-left font-medium"
+            >
+              Category*
+            </Typography>
+            <Select
+              required={true}
+              size="md"
+              onChange={handleCategoryChange}
+              className="!w-full !border-[1.5px] !border-blue-gray-200 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary text-[14px]"
+              placeholder="1"
+              value={taskCategory}
+              labelProps={{
+                className: "hidden",
+              }}
+            >
+              <Option className="text-[12px]" value="Meals">
+                Meals
+              </Option>
+              <Option className="text-[12px]" value="Medical">
+                Medical
+              </Option>
+              <Option className="text-[12px]" value="Hygiene">
+                Hygiene
+              </Option>
+              <Option className="text-[12px]" value="Exercise">
+                Exercise
+              </Option>
+              <Option className="text-[12px]" value="Additional">
+                Additional
+              </Option>
+            </Select>
+          </div>
+          <div className="w-[45%]">
+            <Typography
+              variant="h6"
+              color="black"
+              className="mb-2 text-left font-medium"
+            >
+              Frequency*
+            </Typography>
+            <Select
+              required={true}
+              onChange={handleFrequencyChange}
+              className="!w-full !border-[1.5px] !border-blue-gray-200/90 bg-white text-gray-800 ring-4 ring-transparent focus:!border-primary focus:!border-blue-gray-900 group-hover:!border-primary text-[14px]"
+              placeholder="1"
+              value={taskInterval}
+              labelProps={{
+                className: "hidden",
+              }}
+            >
+              <Option className="text-[12px]" value="Daily">
+                Daily
+              </Option>
+              <Option className="text-[12px]" value="Weekly">
+                Weekly
+              </Option>
+              <Option className="text-[12px]" value="Biweekly">
+                Biweekly
+              </Option>
+              <Option className="text-[12px]" value="Monthly">
+                Monthly
+              </Option>
+            </Select>
+          </div>
         </div>
 
-        <div>
-          <Typography
-            variant="h6"
-            color="blue-gray"
-            className="mb-2 text-left font-medium"
-          >
-            Routine Start Date*
-          </Typography>
-          <ReactDatePicker
-            required={true}
-            selected={startDate}
-            minDate={new Date()}
-            onChange={(selectedDate) => handleStartDateChange(selectedDate)}
-            dateFormat="PPP"
-            customInput={
-              <Input
-                label="Select Date"
-                value={startDate ? startDate : ""}
-                style={{ fontSize: "12px" }}
-              />
-            }
-            popperContainer={({ children }) => (
-              <div className="z-[9999]">{children}</div>
-            )}
-          />
+        <div className="flex flex-row w-full items-end justify-between">
+          <div className="w-[45%]">
+            <Typography
+              variant="h6"
+              color="blue-gray"
+              className="mb-2 text-left font-medium"
+            >
+              Routine Start*
+            </Typography>
+            <ReactDatePicker
+              required={true}
+              selected={startDate}
+              minDate={new Date()}
+              onChange={(selectedDate) => handleStartDateChange(selectedDate)}
+              dateFormat="PPP"
+              customInput={
+                <Input
+                  label="Select Date"
+                  value={startDate ? startDate : ""}
+                  style={{ fontSize: "12px" }}
+                />
+              }
+              popperContainer={({ children }) => (
+                <div className="z-[9999]">{children}</div>
+              )}
+            />
+          </div>
+          <div className="w-[45%]">
+            <Typography
+              variant="h6"
+              color="blue-gray"
+              className="mb-2 text-left font-medium"
+            >
+              Routine End
+            </Typography>
+            <ReactDatePicker
+              disabled={!startDate}
+              selected={endDate}
+              minDate={startDate + 1}
+              onChange={(selectedDate) => setEndDate(selectedDate)}
+              dateFormat="PPP"
+              customInput={
+                <Input
+                  label="Select Date"
+                  value={endDate ? endDate : ""}
+                  style={{ fontSize: "12px" }}
+                />
+              }
+              popperContainer={({ children }) => (
+                <div className="z-[9999]">{children}</div>
+              )}
+            />
+          </div>
         </div>
         <div>
           <Typography
@@ -213,24 +254,27 @@ export function CreateRoutineTask({
             color="blue-gray"
             className="mb-2 text-left font-medium"
           >
-            Routine End Date*
+            Additional Notes
           </Typography>
-          <ReactDatePicker
-            disabled={!startDate}
-            selected={endDate}
-            minDate={startDate + 1}
-            onChange={(selectedDate) => setEndDate(selectedDate)}
-            dateFormat="PPP"
-            customInput={
-              <Input
-                label="Select Date"
-                value={endDate ? endDate : ""}
-                style={{ fontSize: "12px" }}
-              />
-            }
-            popperContainer={({ children }) => (
-              <div className="z-[9999]">{children}</div>
-            )}
+          <Textarea
+            required={true}
+            onChange={handleNotesChange}
+            color="gray"
+            size="lg"
+            name="name"
+            value={taskNotes}
+            className="
+              !border-t-gray-600
+              border-gray-600
+              focus:!border-gray-900
+              !text-[16px]
+              overflow-scroll"
+            containerProps={{
+              className: "!min-w-full",
+            }}
+            labelProps={{
+              className: "hidden",
+            }}
           />
         </div>
         <div className="flex flex-row justify-evenly">

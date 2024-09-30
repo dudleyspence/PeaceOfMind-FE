@@ -2,19 +2,19 @@ import React from "react";
 import {
   Button,
   Dialog,
-  Typography,
   DialogHeader,
   DialogBody,
   IconButton,
-  DialogFooter,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { getScheduledTasks } from "../../../../axios/task.axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { EditScheduledTask } from "./EditScheduledTask";
+import ViewTaskNotes from "./ViewTaskNotes";
 
-export function ViewSchedule({ taskUpdates }) {
-  const [open, setOpen] = React.useState(false);
+export function ViewSchedule({ taskUpdates, setTaskUpdates }) {
+  const [open, setOpen] = useState(false);
   const [scheduledTasks, setScheduledTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +30,7 @@ export function ViewSchedule({ taskUpdates }) {
       setScheduledTasks(tasks);
       tasks.forEach((task) => {
         const date = new Date(task.scheduleDate);
+        task.date = date.toLocaleDateString("en-GB", "PPP");
         task.time = date.toLocaleTimeString("en-GB", {
           hour: "numeric",
           minute: "2-digit",
@@ -49,10 +50,10 @@ export function ViewSchedule({ taskUpdates }) {
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader className="relative m-0 block">
-          <div className="flex flex-row items-center gap-2 justify-start">
+          <div className="flex flex-row items-center gap-5 justify-start mx-5 my-3">
             <svg
               fill="#000000"
-              className="w-6"
+              className="w-8"
               version="1.1"
               id="Capa_1"
               xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +98,7 @@ C0,477.733,17.126,494.859,38.25,494.859z"
                 </g>
               </g>
             </svg>
-            <h3 className="underline font-bold text-base">
+            <h3 className="underline font-bold text-[14px]">
               Appointments and Day Specific tasks
             </h3>
           </div>
@@ -111,42 +112,45 @@ C0,477.733,17.126,494.859,38.25,494.859z"
           </IconButton>
         </DialogHeader>
         <DialogBody>
-          <div
-            id="Day Specific"
-            className="bg-yellow-100 p-5 rounded-lg shadow-lg"
-          >
-            {scheduledTasks.map((task) => (
+          {scheduledTasks.length > 0 ? (
+            scheduledTasks.map((task) => (
               <div
                 key={task._id}
-                className="flex flex-row gap-2 items-center mt-3"
+                className="items-start bg-yellow-100 p-5 rounded-lg shadow-lg gap-2 flex flex-col"
               >
-                <p
-                  className={
-                    "bg-white text-bold py-1 px-2 shadow-md rounded text-sm"
-                  }
-                >
-                  {task.time}
-                </p>
-                <p className={task.isCompleted ? "text-gray-600" : ""}>
+                <p className="ml-2 !text-bold text-black text-[14px]">
                   {task.template.text}
                 </p>
-                {task.isCompleted && (
-                  <svg
-                    className="h-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 48 48"
+                <div className="flex flex-row gap-3 items-center">
+                  <p
+                    className={
+                      "bg-white text-bold text-black py-1 px-2 shadow-md rounded text-lg"
+                    }
                   >
-                    <path
-                      fill="#43A047"
-                      d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                    ></path>
-                  </svg>
-                )}
+                    {task.date}
+                  </p>
+                  <p
+                    className={
+                      "bg-white text-bold text-black py-1 px-2 shadow-md rounded text-lg"
+                    }
+                  >
+                    {task.time}
+                  </p>
+                  {task.template.notes && (
+                    <ViewTaskNotes notes={task.template.notes} />
+                  )}
+                  <EditScheduledTask
+                    task={task}
+                    setTaskUpdates={setTaskUpdates}
+                  />
+                </div>
               </div>
-            ))}
-          </div>
+            ))
+          ) : (
+            <p className="text-center mb-3 font-bold">
+              There are not scheduled tasks or appointments
+            </p>
+          )}
         </DialogBody>
       </Dialog>
     </>

@@ -1,12 +1,11 @@
 import React from "react";
 import { Button, ButtonGroup } from "@material-tailwind/react";
+import { UpdatePatient } from "./UpdatePatient";
 
-export default function GuardianPatientSettings() {
+export default function GuardianPatientSettings({ patient }) {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-5 my-10">
-      <Button className="bg-blue-100 text-black shadow-lg flex flex-row items-center justify-center gap-2 w-4/5">
-        Update Patient
-      </Button>
+      <UpdatePatient patient={patient} />
 
       <Button className="bg-blue-100 w-4/5 text-black">Update Carer</Button>
       <Button className="bg-black text-white shadow-lg flex flex-row items-center justify-center gap-2 w-4/5">

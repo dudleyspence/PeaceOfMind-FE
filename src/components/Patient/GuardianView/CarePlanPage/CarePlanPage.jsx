@@ -17,7 +17,11 @@ export default function CarePlanPage({ patient }) {
           setTaskUpdates={setTaskUpdates}
           patient={patient}
         />
-        <ViewSchedule taskUpdates={taskUpdates} patient_id={patient._id} />
+        <ViewSchedule
+          taskUpdates={taskUpdates}
+          setTaskUpdates={setTaskUpdates}
+          patient_id={patient._id}
+        />
       </div>
       <RoutineList
         taskUpdates={taskUpdates}

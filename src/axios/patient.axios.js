@@ -5,3 +5,11 @@ export const getPatientByPatientId = (patient_id) => {
     return data;
   });
 };
+
+export const updatePatient = (patient_id, update) => {
+  return peaceOfMindAPI
+    .patch(`/patients/${patient_id}`, update)
+    .then(({ data }) => {
+      return data;
+    });
+};

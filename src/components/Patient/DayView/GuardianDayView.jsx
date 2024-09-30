@@ -5,6 +5,7 @@ import { getTasksForSpecificDay } from "../../../axios/task.axios";
 import ProgressTab from "../PatientTabs/PatientProgressTab";
 import noTasks from "../../../assets/patient/NoTasks.png";
 import { DayViewPagination } from "./DayViewPagination";
+import ViewTaskNotes from "../GuardianView/CarePlanPage/ViewTaskNotes";
 
 export default function GuardianDayReview() {
   const [patient, setPatient] = useState(null);
@@ -165,6 +166,9 @@ export default function GuardianDayReview() {
                     <p className={task.isCompleted ? "text-gray-600" : ""}>
                       {task.template.text}
                     </p>
+                    {task.template.notes && (
+                      <ViewTaskNotes notes={task.template.notes} />
+                    )}
                     {task.isCompleted && (
                       <svg
                         className="h-5"

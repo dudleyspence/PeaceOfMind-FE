@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input, Alert, Typography } from "@material-tailwind/react";
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,6 +15,7 @@ export function CreateDaySpecificTask({
 }) {
   const [taskText, setTaskText] = useState("");
   const [scheduledDate, setScheduledDate] = useState(null);
+  const [taskNotes, setTaskNotes] = useState("");
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
@@ -36,6 +37,9 @@ export function CreateDaySpecificTask({
         carer: patient.carers[0]._id,
         patient: patient._id,
       };
+      if (taskNotes) {
+        template.notes = taskNotes;
+      }
       const task = { taskTemplate: template, taskInstance: instance };
       postTask(task).then(() => {
         setTaskUpdates(true);
@@ -45,16 +49,20 @@ export function CreateDaySpecificTask({
       setShowAlert(true);
     }
   }
+  function handleNotesChange(event) {
+    setTaskNotes(event.target.value);
+  }
 
   function handleClear() {
     setTaskText("");
     showAlert(false);
     setScheduledDate(null);
+    setTaskNotes("");
   }
 
   return (
     <>
-      <form className="space-y-4 pb-2 overflow-scroll">
+      <form className="space-y-4 pb-2 overflow-visible">
         <div>
           <Typography
             variant="h6"
@@ -74,7 +82,7 @@ export function CreateDaySpecificTask({
               !border-t-gray-600
               border-gray-600
               focus:!border-gray-900
-              text-[13px]"
+              !text-[16px]"
             containerProps={{
               className: "!min-w-full",
             }}
@@ -86,8 +94,8 @@ export function CreateDaySpecificTask({
 
         <div>
           <Typography
-            variant="h6"
-            color="blue-gray"
+            variant="large"
+            color="black"
             className="mb-2 text-left font-medium"
           >
             Scheduled Date*
@@ -95,6 +103,7 @@ export function CreateDaySpecificTask({
           <ReactDatePicker
             required={true}
             showTimeSelect
+            className="!text-[16px]"
             timeIntervals={10}
             minDate={new Date()}
             selected={scheduledDate}
@@ -104,12 +113,41 @@ export function CreateDaySpecificTask({
               <Input
                 label="Select Date"
                 value={scheduledDate ? scheduledDate : ""}
-                style={{ fontSize: "12px" }}
+                style={{ fontSize: "16px" }}
               />
             }
             popperContainer={({ children }) => (
               <div className="z-[9999]">{children}</div>
             )}
+          />
+        </div>
+        <div>
+          <Typography
+            variant="h6"
+            color="blue-gray"
+            className="mb-2 text-left font-medium"
+          >
+            Additional Notes
+          </Typography>
+          <Textarea
+            required={true}
+            onChange={handleNotesChange}
+            color="gray"
+            size="lg"
+            name="name"
+            value={taskNotes}
+            className="
+              !border-t-gray-600
+              border-gray-600
+              focus:!border-gray-900
+              !text-[16px]
+              overflow-scroll"
+            containerProps={{
+              className: "!min-w-full",
+            }}
+            labelProps={{
+              className: "hidden",
+            }}
           />
         </div>
 
