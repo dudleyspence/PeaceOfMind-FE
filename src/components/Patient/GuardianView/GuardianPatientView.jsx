@@ -28,21 +28,11 @@ export function GuardianPatientView() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  const [carer, setCarer] = useState(() => {
-    if (patient) {
-      return patient.carers[0];
-    } else {
-      setIsLoading(true);
-      return null;
-    }
-  });
-
   useEffect(() => {
     setIsLoading(true);
     getPatientByPatientId(patient_id).then((patient) => {
       setIsLoading(false);
       setPatient(patient);
-      setCarer(patient.carers[0]);
       setData([
         {
           label: patient.name.split(" ")[0],
