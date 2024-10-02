@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from "react";
 
 import { CommentInput } from "./CommentInput";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectComments,
+  selectCommentsError,
+  selectCommentsLoading,
+} from "../../../state/slices/commentsSlice";
+import { selectPatient } from "../../../state/slices/patientSlice";
 
 export default function PatientComments() {
-  const { patient } = useSelector((state) => state.patient);
-  const { comments, isLoading, error } = useSelector((state) => state.comments);
+  const patient = useSelector(selectPatient);
+
+  const comments = useSelector(selectComments);
+  const isLoading = useSelector(selectCommentsLoading);
+  const error = useSelector(selectCommentsError);
 
   const dispatch = useDispatch();
 
@@ -15,9 +24,15 @@ export default function PatientComments() {
     }
   }, [dispatch, patient._id, comments]);
 
-  return isLoading ? (
-    "Loading"
-  ) : (
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  return (
     <div className="text-base bg-teal-100 p-3 rounded-lg shadow-xl w-full max-w-96">
       <div className="max-h-56 overflow-scroll">
         {comments.length > 0
@@ -43,11 +58,7 @@ export default function PatientComments() {
             ))
           : "There isn't any notes yet for this day"}
       </div>
-      <CommentInput
-        patient_id={patient_id}
-        comments={comments}
-        setComments={setComments}
-      />
+      <CommentInput />
     </div>
   );
 }

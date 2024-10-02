@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getPatientByPatientId } from "../axios/patient.axios";
+import { getPatientByPatientId } from "../../axios/patient.axios";
 
 export const fetchPatient = createAsyncThunk(
   "patient/fetchPatient",
@@ -39,5 +39,12 @@ const patientSlice = createSlice({
       });
   },
 });
+
+export const selectPatientCarer = (state) => state.patient.carer;
+export const selectPatient = (state) => state.patient.patient;
+export const selectPatientLoading = (state) => state.patient.isLoading;
+export const selectPatientError = (state) => state.patient.error;
+
+export const { resetPatient } = patientSlice.actions;
 
 export default patientSlice.reducer;

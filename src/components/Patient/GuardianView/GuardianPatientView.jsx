@@ -18,13 +18,21 @@ import CarePlan from "../../../assets/patient/CarePlan";
 import PatientComments from "./PatientComments";
 import CarePlanPage from "./CarePlanPage/CarePlanPage";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPatient } from "../../../slices/patientSlice";
+import { fetchPatient } from "../../../state/slices/patientSlice";
+import {
+  selectPatient,
+  selectPatientLoading,
+  selectPatientError,
+} from "../../../state/slices/patientSlice";
+
 export function GuardianPatientView() {
   const { patient_id } = useParams();
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
 
-  const { patient, isLoading, error } = useSelector((state) => state.patient);
+  const patient = useSelector(selectPatient);
+  const isLoading = useSelector(selectPatientLoading);
+  const error = useSelector(selectPatientError);
 
   useEffect(() => {
     if (!patient || patient._id !== patient_id) {
@@ -41,7 +49,7 @@ export function GuardianPatientView() {
           icon: UserCircleIcon,
           desc: (
             <div className="p-2 flex flex-col gap-5 rounded-lg">
-              <PatientInfoCard patient={patient} />
+              <PatientInfoCard />
               <div className="cursor-pointer hover:shadow-lg">
                 <ProgressTab patient_id={patient_id} />
               </div>

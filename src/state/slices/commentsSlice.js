@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getPatientComments, addPatientComment } from "../axios/comments.axios";
+import {
+  getPatientComments,
+  postComment as addPatientComment,
+} from "../../axios/comments.axios";
 
 export const fetchComments = createAsyncThunk(
   "comments/fetchComments",
@@ -61,6 +64,7 @@ const commentsSlice = createSlice({
         state.error = null;
       })
       .addCase(addComment.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.comments = [...state.comments, action.payload];
       })
       .addCase(addComment.rejected, (state, action) => {
@@ -69,5 +73,11 @@ const commentsSlice = createSlice({
       });
   },
 });
+
+export const { resetComments } = commentsSlice.actions;
+
+export const selectComments = (state) => state.comments.comments;
+export const selectCommentsLoading = (state) => state.comments.isLoading;
+export const selectCommentsError = (state) => state.comments.error;
 
 export default commentsSlice.reducer;
