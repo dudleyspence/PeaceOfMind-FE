@@ -33,3 +33,41 @@ export const addComment = createAsyncThunk(
     }
   }
 );
+
+const commentsSlice = createSlice({
+  name: "comments",
+  initialState: {
+    comments: [],
+    isLoading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchComments.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.comments = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchComments.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(addComment.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.comments = [...state.comments, action.payload];
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        state.error = action.payload;
+        state.isLoading = false;
+      });
+  },
+});
+
+export default commentsSlice.reducer;

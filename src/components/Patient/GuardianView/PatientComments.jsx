@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { getPatientComments } from "../../../axios/comments.axios";
-import { CommentInput } from "./CommentInput";
 
-export default function PatientComments({ patient_id }) {
-  const [comments, setComments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+import { CommentInput } from "./CommentInput";
+import { useSelector } from "react-redux";
+
+export default function PatientComments() {
+  const { patient } = useSelector((state) => state.patient);
+  const { comments, isLoading, error } = useSelector((state) => state.comments);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsLoading(true);
-    getPatientComments(patient_id).then((comments) => {
-      setComments(comments);
-      setIsLoading(false);
-    });
-  }, []);
+    if (!comments) {
+      dispatch(fetchComments(patient._id));
+    }
+  }, [dispatch, patient._id, comments]);
 
   return isLoading ? (
     "Loading"

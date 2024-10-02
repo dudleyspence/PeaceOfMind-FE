@@ -27,8 +27,6 @@ export function GuardianPatientView() {
   const { patient, isLoading, error } = useSelector((state) => state.patient);
 
   useEffect(() => {
-    console.log("Fetching patient", patient_id);
-    console.log("Patient", patient);
     if (!patient || patient._id !== patient_id) {
       dispatch(fetchPatient(patient_id));
     }
