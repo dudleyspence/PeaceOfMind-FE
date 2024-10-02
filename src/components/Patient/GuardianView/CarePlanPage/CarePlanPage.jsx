@@ -9,7 +9,7 @@ export default function CarePlanPage({ patient }) {
   const [taskUpdates, setTaskUpdates] = useState(false);
 
   return (
-    <div className="p-2 flex flex-col">
+    <div className="p-2 flex flex-col items-center">
       <CarerInfoCard carer={patient.carers[0]} />
       <div className="w-full flex flex-row justify-evenly items-center mt-4">
         <CreateTaskContainer

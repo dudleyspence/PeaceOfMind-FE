@@ -6,14 +6,10 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import {
-  Square3Stack3DIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/solid";
+import { UserCircleIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
 import ProgressTab from "../PatientTabs/PatientProgressTab";
 import { useParams } from "react-router-dom";
-import { getPatientByPatientId } from "../../../axios/patient.axios";
+
 import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
@@ -21,28 +17,25 @@ import GuardianPatientSettings from "./SettingsPage/GuardianPatientSettings";
 import CarePlan from "../../../assets/patient/CarePlan";
 import PatientComments from "./PatientComments";
 import CarePlanPage from "./CarePlanPage/CarePlanPage";
-
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPatient } from "../../../slices/patientSlice";
 export function GuardianPatientView() {
   const { patient_id } = useParams();
-  const [patient, setPatient] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
-  const [carer, setCarer] = useState(() => {
-    if (patient) {
-      return patient.carers[0];
-    } else {
-      setIsLoading(true);
-      return null;
-    }
-  });
+  const { patient, isLoading, error } = useSelector((state) => state.patient);
 
   useEffect(() => {
-    setIsLoading(true);
-    getPatientByPatientId(patient_id).then((patient) => {
-      setIsLoading(false);
-      setPatient(patient);
-      setCarer(patient.carers[0]);
+    console.log("Fetching patient", patient_id);
+    console.log("Patient", patient);
+    if (!patient || patient._id !== patient_id) {
+      dispatch(fetchPatient(patient_id));
+    }
+  }, [dispatch, patient, patient_id]);
+
+  useEffect(() => {
+    if (patient) {
       setData([
         {
           label: patient.name.split(" ")[0],
@@ -72,12 +65,18 @@ export function GuardianPatientView() {
           desc: <GuardianPatientSettings patient={patient} />,
         },
       ]);
-    });
-  }, [patient_id]);
+    }
+  }, [patient, patient_id]);
 
-  return isLoading ? (
-    "loading"
-  ) : (
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  return (
     <Tabs value="profile">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (

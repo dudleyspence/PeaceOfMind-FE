@@ -111,14 +111,14 @@ C0,477.733,17.126,494.859,38.25,494.859z"
             <XMarkIcon className="h-4 w-4 stroke-2" />
           </IconButton>
         </DialogHeader>
-        <DialogBody>
+        <DialogBody className="flex flex-col max-h-[70vh] overflow-scroll gap-5">
           {scheduledTasks.length > 0 ? (
             scheduledTasks.map((task) => (
               <div
                 key={task._id}
                 className="items-start bg-yellow-100 p-5 rounded-lg shadow-lg gap-2 flex flex-col"
               >
-                <p className="ml-2 !text-bold text-black text-[14px]">
+                <p className="ml-2 font-bold text-black text-[14px]">
                   {task.template.text}
                 </p>
                 <div className="flex flex-row gap-3 items-center">
