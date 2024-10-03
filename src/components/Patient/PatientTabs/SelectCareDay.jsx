@@ -6,11 +6,14 @@ import { formatISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { List, ListItem, Card } from "@material-tailwind/react";
 import { SelectCareDayPagination } from "./SelectCareDayPaginiation";
+import { setChosenDay } from "../../../state/slices/daySlice";
+import { useParams } from "react-router-dom";
 
-export default function SelectCareDay({ patient_id }) {
+export default function SelectCareDay() {
   const [previous7Days, setPrevious7Days] = useState([]);
   const [active, setActive] = useState(1);
   const navigate = useNavigate();
+  const { patient_id } = useParams();
 
   function getLast7Days() {
     const daysArray = [];

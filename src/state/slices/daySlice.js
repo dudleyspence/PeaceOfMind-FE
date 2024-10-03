@@ -63,6 +63,7 @@ const daySlice = createSlice({
   name: "day",
   initialState: {
     currentDay: new Date(),
+    chosenDate: null,
     isLoading: false,
     error: null,
     tasks: [],
@@ -79,6 +80,9 @@ const daySlice = createSlice({
   reducers: {
     setCurrentDay(state, action) {
       state.currentDay = action.payload;
+    },
+    setChosenDay(state, action) {
+      state.chosenDay = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -100,7 +104,7 @@ const daySlice = createSlice({
   },
 });
 
-export const { setCurrentDay, resetDay } = daySlice.actions;
+export const { setCurrentDay, resetDay, setChosenDay } = daySlice.actions;
 
 export const selectDay = (state) => state.day.currentDay;
 export const selectDayTasks = (state) => state.day.tasks;
@@ -108,5 +112,6 @@ export const selectDayTasksLoading = (state) => state.day.isLoading;
 export const selectDayTasksError = (state) => state.day.error;
 export const selectDayProgress = (state) => state.day.progress;
 export const selectSortedDayTasks = (state) => state.day.sortedTasks;
+export const selectChosenDay = (state) => state.day.chosenDate;
 
 export default daySlice.reducer;

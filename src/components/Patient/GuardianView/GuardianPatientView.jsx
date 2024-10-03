@@ -51,10 +51,10 @@ export function GuardianPatientView() {
             <div className="p-2 flex flex-col gap-5 rounded-lg">
               <PatientInfoCard />
               <div className="cursor-pointer hover:shadow-lg">
-                <ProgressTab patient_id={patient_id} />
+                <ProgressTab />
               </div>
-              <PatientComments patient_id={patient_id} />
-              <SelectDate patient_id={patient_id} />
+              <PatientComments />
+              <SelectDate />
             </div>
           ),
         },
@@ -62,7 +62,7 @@ export function GuardianPatientView() {
           label: "Care Plan",
           value: "Care",
           icon: CarePlan,
-          desc: <CarePlanPage patient={patient} />,
+          desc: <CarePlanPage />,
         },
         {
           label: "Settings",

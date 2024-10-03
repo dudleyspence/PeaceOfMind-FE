@@ -22,7 +22,7 @@ import {
   deleteTaskInstance,
   updateTaskInsance,
   updateTaskTemplate,
-} from "../../../../axios/task.axios";
+} from "../../../../../axios/task.axios";
 import { formatISO } from "date-fns";
 
 export function EditScheduledTask({ task, setTaskUpdates }) {

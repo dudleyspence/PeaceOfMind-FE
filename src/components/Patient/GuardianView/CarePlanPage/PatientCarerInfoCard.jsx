@@ -6,10 +6,14 @@ import {
   Typography,
   CardBody,
 } from "@material-tailwind/react";
+import { selectPatientCarer } from "../../../../state/slices/patientSlice";
+import { useSelector } from "react-redux";
 
-export default function PatientCarerInfoCard({ carer }) {
+export default function PatientCarerInfoCard() {
   const [open, setOpen] = React.useState(false);
   const toggleOpen = () => setOpen((cur) => !cur);
+  const carer = useSelector(selectPatientCarer);
+
   return (
     <div
       id="carers-profile"

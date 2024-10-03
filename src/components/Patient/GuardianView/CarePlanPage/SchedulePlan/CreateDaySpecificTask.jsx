@@ -3,19 +3,22 @@ import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { postTask } from "../../../../axios/task.axios";
+import { postTask } from "../../../../../axios/task.axios";
 import { formatISO } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export function CreateDaySpecificTask({
   open,
   setOpen,
   patient,
   setShowAlert,
-  setTaskUpdates,
 }) {
   const [taskText, setTaskText] = useState("");
   const [scheduledDate, setScheduledDate] = useState(null);
   const [taskNotes, setTaskNotes] = useState("");
+  const { patient_id } = useParams();
+  const dispatch = useDispatch();
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
@@ -28,7 +31,7 @@ export function CreateDaySpecificTask({
         text: taskText,
         isDaySpecific: true,
         nextInstanceDate: formatISO(scheduledDate),
-        patient: patient._id,
+        patient: patient_id,
         carer: patient.carers[0]._id,
         guardian: patient.guardians[0]._id,
       };
@@ -42,7 +45,7 @@ export function CreateDaySpecificTask({
       }
       const task = { taskTemplate: template, taskInstance: instance };
       postTask(task).then(() => {
-        setTaskUpdates(true);
+        dispatch(fetchScheduledTasks(patient_id));
         setOpen(!open);
       });
     } else {

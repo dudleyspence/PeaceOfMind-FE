@@ -7,43 +7,43 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { getScheduledTasks } from "../../../../axios/task.axios";
+import { getScheduledTasks } from "../../../../../axios/task.axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { EditScheduledTask } from "./EditScheduledTask";
-import ViewTaskNotes from "./ViewTaskNotes";
+import ViewTaskNotes from "../ViewTaskNotes";
+import {
+  fetchScheduledTasks,
+  selectCarePlanError,
+  selectCarePlanLoading,
+  selectScheduledTasks,
+} from "../../../../../state/slices/carePlanSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 export function ViewSchedule({ taskUpdates, setTaskUpdates }) {
   const [open, setOpen] = useState(false);
-  const [scheduledTasks, setScheduledTasks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const scheduledTasks = useSelector(selectScheduledTasks);
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectCarePlanLoading);
+  const error = useSelector(selectCarePlanError);
 
   const { patient_id } = useParams();
 
   const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
-    setIsLoading(true);
-    console.log(patient_id);
-    getScheduledTasks(patient_id).then((tasks) => {
-      setIsLoading(false);
-      setScheduledTasks(tasks);
-      tasks.forEach((task) => {
-        const date = new Date(task.scheduleDate);
-        task.date = date.toLocaleDateString("en-GB", "PPP");
-        task.time = date.toLocaleTimeString("en-GB", {
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        });
-      });
-      console.log(tasks);
-    });
-  }, [patient_id, taskUpdates]);
+    dispatch(fetchScheduledTasks(patient_id));
+  }, [dispatch, patient_id]);
 
-  return isLoading ? (
-    "Loading"
-  ) : (
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  return (
     <>
       <Button onClick={handleOpen} variant="gradient" className="text-sm">
         Non-Routine Schedule

@@ -6,9 +6,10 @@ import noTasks from "../../../assets/patient/NoTasks.png";
 import { DayViewPagination } from "./DayViewPagination";
 import ViewTaskNotes from "../GuardianView/CarePlanPage/ViewTaskNotes";
 import { useSelector, useDispatch } from "react-redux";
-import { selectPatient } from "../../../state/slices/patientSlice";
+
 import {
   fetchDayTasks,
+  selectChosenDay,
   selectDayProgress,
   selectDayTasks,
   selectDayTasksError,
@@ -19,7 +20,6 @@ import {
 export default function GuardianDayReview() {
   const { patient_id, isoDate } = useParams();
   const dispatch = useDispatch();
-  const patient = useSelector(selectPatient);
   const isLoading = useSelector(selectDayTasksLoading);
   console.log(isLoading);
   const error = useSelector(selectDayTasksError);
