@@ -1,36 +1,35 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPatientByPatientId } from "../../../axios/patient.axios";
-import { getTasksForSpecificDay } from "../../../axios/task.axios";
+
 import ProgressTab from "../PatientTabs/PatientProgressTab";
 import noTasks from "../../../assets/patient/NoTasks.png";
 import { DayViewPagination } from "./DayViewPagination";
 import ViewTaskNotes from "../GuardianView/CarePlanPage/ViewTaskNotes";
+import { useSelector, useDispatch } from "react-redux";
+import { selectPatient } from "../../../state/slices/patientSlice";
+import {
+  fetchDayTasks,
+  selectDayProgress,
+  selectDayTasks,
+  selectDayTasksError,
+  selectDayTasksLoading,
+  selectSortedDayTasks,
+} from "../../../state/slices/daySlice";
 
 export default function GuardianDayReview() {
-  const [patient, setPatient] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [tasks, setTasks] = useState([]);
-  const [completionPercentage, setCompletionPercentage] = useState(0);
-  const [totalTasks, setTotalTasks] = useState(0);
-  const [carer, setCarer] = useState(() => {
-    if (patient) {
-      return patient.carers[0];
-    } else {
-      setIsLoading(true);
-      return null;
-    }
-  });
   const { patient_id, isoDate } = useParams();
+  const dispatch = useDispatch();
+  const patient = useSelector(selectPatient);
+  const isLoading = useSelector(selectDayTasksLoading);
+  console.log(isLoading);
+  const error = useSelector(selectDayTasksError);
+  const tasks = useSelector(selectSortedDayTasks);
+  const progress = useSelector(selectDayProgress);
+  const totalTasks = useSelector(selectDayTasks).length;
 
-  const sortedTasks = {
-    Meals: [],
-    Hygiene: [],
-    Medical: [],
-    Exercise: [],
-    Additional: [],
-    "Day Specific": [],
-  };
+  useEffect(() => {
+    dispatch(fetchDayTasks({ patient_id, date: isoDate }));
+  }, [dispatch, patient_id, isoDate]);
 
   const intervalColors = {
     Daily: "bg-blue-200",
@@ -40,48 +39,18 @@ export default function GuardianDayReview() {
     None: "bg-white text-bold",
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    getPatientByPatientId(patient_id).then((patient) => {
-      setPatient(patient);
-      setCarer(patient.carers[0]);
-      getTasksForSpecificDay(patient_id, isoDate).then((tasks) => {
-        setIsLoading(false);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-        tasks.forEach((task) => {
-          if (!task.template.category) {
-            task.template.category = "Day Specific";
-            const date = new Date(task.scheduleDate);
-            task.time = date.toLocaleTimeString("en-GB", {
-              hour: "numeric",
-              minute: "2-digit",
-              hour12: true,
-            });
-          }
-          sortedTasks[task.template.category].push(task);
-        });
-        const totalTasks = tasks.length;
-        setTotalTasks(totalTasks);
-        const completed = tasks.filter((task) => task.isCompleted).length;
-        const completePercentage =
-          (completed / totalTasks) * 100 ? (completed / totalTasks) * 100 : 0;
-        setCompletionPercentage(completePercentage);
-        setTasks(sortedTasks);
-        console.log(tasks);
-      });
-    });
-  }, [isoDate]);
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
-  return isLoading ? (
-    "loading"
-  ) : (
+  return (
     <div className="p-2 flex flex-col gap-4 pb-10 justify-center items-center w-full">
       <DayViewPagination />
-      <ProgressTab
-        chosenDate={isoDate}
-        completionPercentage={completionPercentage}
-      />
-      {console.log(totalTasks)}
+      <ProgressTab chosenDate={isoDate} completionPercentage={progress} />
       <div className="bg-pink-100 p-3 rounded-lg max-w-96 w-full">
         {totalTasks === 0 ? (
           <div className="w-full h-full flex flex-col gap-3 justify-center items-center">

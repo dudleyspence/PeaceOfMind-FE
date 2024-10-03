@@ -3,7 +3,7 @@ import { PatientProgressBar } from "./PatientProgressBar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function PatientProgressTab({
+export default function ProgressTab({
   patient_id,
   chosenDate,
   completionPercentage,
