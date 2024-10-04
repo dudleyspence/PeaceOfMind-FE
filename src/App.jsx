@@ -10,6 +10,8 @@ import Header from "./components/Header/Header";
 import CarerPatientView from "./components/Carer/CarerPatientView";
 import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
 import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
+import { LoginPage } from "./components/Auth/LoginPage";
+import { SignUpPage } from "./components/Auth/SignUpPage";
 
 function App() {
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
@@ -33,7 +35,8 @@ function App() {
     <div className="bg-backgroundCream min-h-screen box-border px-3">
       {(guardianLoggedIn || carerLoggedIn) && <Header />}
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/SignUp/:role" element={<SignUpPage />} />
         <Route
           path="/dashboard"
           element={

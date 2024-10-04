@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getTaskTemplatesByPatientId } from "../../axios/task.axios";
+import {
+  getTaskTemplatesByPatientId,
+  getScheduledTasks,
+} from "../../axios/task.axios";
 
 export const fetchRoutineTasks = createAsyncThunk(
   "carePlan/fetchRoutineTasks",

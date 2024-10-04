@@ -21,7 +21,6 @@ export default function GuardianDayReview() {
   const { patient_id, isoDate } = useParams();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectDayTasksLoading);
-  console.log(isLoading);
   const error = useSelector(selectDayTasksError);
   const tasks = useSelector(selectSortedDayTasks);
   const progress = useSelector(selectDayProgress);

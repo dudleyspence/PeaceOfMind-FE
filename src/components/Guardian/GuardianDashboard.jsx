@@ -6,6 +6,7 @@ import phone from "../../assets/dashboard/phone.svg";
 import email from "../../assets/dashboard/email.svg";
 import { NotificationsButton } from "../General/NotificationsButton";
 import { Button } from "@material-tailwind/react";
+import { AddPatient } from "./AddPatient/AddPatient";
 
 export default function GuardianDashboard() {
   const { guardianLoggedIn } = useContext(UserContext);
@@ -110,7 +111,7 @@ export default function GuardianDashboard() {
       </div>
       <div className="w-full max-w-md flex flex-row justify-between ">
         <NotificationsButton />
-        <Button className="text-sm">Add Patient</Button>
+        <AddPatient />
         <Button className="flex items-center justify-center px-3 gap-2 text-sm">
           <svg
             className="fill-white h-5 w-5"

@@ -7,6 +7,7 @@ import { postTask } from "../../../../../axios/task.axios";
 import { formatISO } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { fetchScheduledTasks } from "../../../../../state/slices/carePlanSlice";
 
 export function CreateDaySpecificTask({
   open,
