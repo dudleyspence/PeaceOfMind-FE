@@ -1,16 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAtfErY8DoZG_9FJow5vmG9KnyEJUYGytQ",
-  authDomain: "travelsync-extended.firebaseapp.com",
-  projectId: "travelsync-extended",
-  storageBucket: "travelsync-extended.appspot.com",
-  messagingSenderId: "453150346257",
-  appId: "1:453150346257:web:ebd4c0c78bf178f4fc35b0",
-  measurementId: "G-8WH6EQW83M",
+  apiKey: "AIzaSyAz-GuevR8EgZ3iAWJ9WJdfl-H4gPb3-W4",
+  authDomain: "peaceofmind-99d3e.firebaseapp.com",
+  projectId: "peaceofmind-99d3e",
+  storageBucket: "peaceofmind-99d3e.appspot.com",
+  messagingSenderId: "483643163922",
+  appId: "1:483643163922:web:3502198791de0915a59fcb",
+  measurementId: "G-ZK9TG0J5XK",
 };
 
 const app = initializeApp(firebaseConfig);

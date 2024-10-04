@@ -20,7 +20,13 @@ export function SignUpType() {
 
   return (
     <>
-      <p onClick={handleOpen}>Sign Up</p>
+      <Typography
+        component="div"
+        className="cursor-pointer font-bold"
+        onClick={handleOpen}
+      >
+        Sign Up
+      </Typography>
       <Dialog size="md" open={open} handler={handleOpen}>
         <DialogHeader className="justify-between">
           <div>
@@ -60,7 +66,7 @@ export function SignUpType() {
                 onClick={() => {
                   navigate("/SignUp/Guardian");
                 }}
-                className="mb-4 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50"
+                className="mb-4 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50 hover:bg-teal-200"
               >
                 <svg
                   className="h-8 w-8"
@@ -102,7 +108,7 @@ export function SignUpType() {
                 onClick={() => {
                   navigate("/SignUp/Carer");
                 }}
-                className="mb-1 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50"
+                className="mb-1 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50  hover:bg-teal-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
