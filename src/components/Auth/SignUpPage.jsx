@@ -8,13 +8,88 @@ import {
 } from "@material-tailwind/react";
 import { useParams, Link } from "react-router-dom";
 import PeaceOfMindLogo from "../../assets/Logo/PeaceOfMind_logo_small.png";
+import { useState } from "react";
+import { doSignInWithGoogle } from "../../firebase/auth";
+import { ErrorTab } from "../General/ErrorTab";
+import addNewUser from "../../axios/index.axios";
 
 export function SignUpPage() {
   const { role } = useParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isAcceptingTerms, setIsAcceptingTerms] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function onSubmit(event) {
+    event.preventDefault();
+    setErrorMessage("");
+    if (!email || !password || !name || !confirmPassword || !isAcceptingTerms) {
+      setErrorMessage("All fields are required");
+      return;
+    }
+
+    if (!isRegistering) {
+      if (password !== confirmPassword) {
+        setErrorMessage("Passwords do not match");
+        return;
+      }
+
+      setIsRegistering(true);
+
+      doCreateUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          return addNewUser(user.uid, name, email, role);
+        })
+        .then(() => {
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error("Error during sign-up process:", error);
+          setErrorMessage(error.message);
+        })
+        .finally(() => {
+          setIsRegistering(false);
+        });
+    }
+  }
+
+  function onGoogleSignUp(event) {
+    event.preventDefault;
+    if (!isRegistering) {
+      setIsRegistering(true);
+      doSignInWithGoogle()
+        .then((result) => {
+          const user = result.user;
+          console.log(result._tokenResponse.isNewUser);
+          if (result._tokenResponse.isNewUser) {
+            saveNewUser(user.uid, user.displayName, user.email, role)
+              .then((response) => {
+                console.log("new user saved to the database:", response);
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          } else {
+            console.log("existing user signed in");
+          }
+        })
+        .catch((err) => {
+          setIsRegistering(false);
+        });
+    }
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <Card shadow={false} className="bg-blue-100 p-5 max-w-[95%]">
+      <Card
+        shadow={false}
+        className="bg-blue-100 p-5 max-w-[95%] max-h-[90%] overflow-scroll"
+      >
         <div className="flex flex-row gap-4 justify-between">
           <div className="flex flex-col gap-1">
             <Typography variant="h5" color="black">
@@ -28,12 +103,18 @@ export function SignUpPage() {
           <img className="h-12" src={PeaceOfMindLogo} alt="Logo" />
         </div>
 
-        <form className="mt-6 mb-2 w-70 max-w-screen-lg sm:w-96">
+        <form
+          className="mt-6 mb-2 w-70 max-w-screen-lg sm:w-96"
+          onSubmit={onSubmit}
+        >
           <div className="mb-1 flex flex-col gap-5">
             <Typography variant="h6" color="black" className="-mb-3">
               Your Name
             </Typography>
             <Input
+              required
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               size="md sm:lg"
               placeholder="name@mail.com"
               className="bg-white !text-[16px] !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -45,6 +126,9 @@ export function SignUpPage() {
               Your Email
             </Typography>
             <Input
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               size="md sm:lg"
               placeholder="name@mail.com"
               className="bg-white !text-[16px] !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -56,6 +140,24 @@ export function SignUpPage() {
               Password
             </Typography>
             <Input
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              size="md sm:lg"
+              placeholder="********"
+              className="bg-white !text-[16px] !border-t-blue-gray-200 focus:!border-t-gray-900"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+            />
+            <Typography variant="h6" color="blue-gray" className="-mb-3">
+              Confirm Password
+            </Typography>
+            <Input
+              required
+              value={confirmPassword}
+              onChange={(event) => setConfirmPassword(event.target.value)}
               type="password"
               size="md sm:lg"
               placeholder="********"
@@ -67,6 +169,7 @@ export function SignUpPage() {
           </div>
           <Checkbox
             className="bg-white"
+            onChange={(event) => setIsAcceptingTerms(event.target.checked)}
             label={
               <Typography
                 variant="small"
@@ -84,11 +187,23 @@ export function SignUpPage() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          {errorMessage && <ErrorTab errorMessage={errorMessage} />}
+          <Button
+            className="mt-6"
+            fullWidth
+            disabled={!isAcceptingTerms}
+            type="submit"
+          >
             sign up
           </Button>
           <div className="flex flex-row justify-center items-center gap-5 my-6">
-            <IconButton className="rounded bg-[#ea4335] hover:shadow-[#ea4335]/20 focus:shadow-[#ea4335]/20 active:shadow-[#ea4335]/10">
+            <IconButton
+              disabled={isRegistering}
+              onClick={(e) => {
+                onGoogleSignUp(e);
+              }}
+              className="rounded bg-[#ea4335] hover:shadow-[#ea4335]/20 focus:shadow-[#ea4335]/20 active:shadow-[#ea4335]/10"
+            >
               <svg
                 className="h-5 w-5"
                 viewBox="0 0 20 20"
@@ -121,7 +236,10 @@ export function SignUpPage() {
                 </g>
               </svg>
             </IconButton>
-            <IconButton className="rounded bg-[#1877F2] hover:shadow-[#1DA1F2]/20 focus:shadow-[#1DA1F2]/20 active:shadow-[#1DA1F2]/10">
+            <IconButton
+              disabled={isRegistering}
+              className="rounded bg-[#1877F2] hover:shadow-[#1DA1F2]/20 focus:shadow-[#1DA1F2]/20 active:shadow-[#1DA1F2]/10"
+            >
               <svg
                 fill="white"
                 className="h-5 w-5"
@@ -144,7 +262,10 @@ export function SignUpPage() {
                 </g>
               </svg>
             </IconButton>
-            <IconButton className="rounded bg-[#333333] hover:shadow-[#333333]/20 focus:shadow-[#333333]/20 active:shadow-[#333333]/10">
+            <IconButton
+              disabled={isRegistering}
+              className="rounded bg-[#333333] hover:shadow-[#333333]/20 focus:shadow-[#333333]/20 active:shadow-[#333333]/10"
+            >
               <svg
                 viewBox="-1.5 0 20 20"
                 version="1.1"
