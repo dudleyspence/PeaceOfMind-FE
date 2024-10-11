@@ -7,9 +7,11 @@ import email from "../../assets/dashboard/email.svg";
 import { NotificationsButton } from "../General/NotificationsButton";
 import { Button } from "@material-tailwind/react";
 import { AddPatient } from "./AddPatient/AddPatient";
+import { useAuth } from "../Context/AuthContext";
 
 export default function GuardianDashboard() {
-  const { guardianLoggedIn } = useContext(UserContext);
+  const { guardianLoggedIn, currentUser } = useAuth();
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -21,20 +23,22 @@ export default function GuardianDashboard() {
     }
   }, [guardianLoggedIn]);
 
-  return isLoading ? (
-    "Loading User"
-  ) : (
+  if (isLoading) {
+    return <p>Loading</p>;
+  }
+
+  return (
     <div className="h-[calc(100%-6rem)] flex flex-col items-center gap-8">
       <div className="flex flex-row items-center gap-5 p-5 rounded-md shadow-lg bg-cyan-900 max-w-md">
         <div className="w-1/3 h-auto aspect-square rounded-full overflow-hidden max-w-36">
           <img
-            src={guardianLoggedIn.user.profileImageURL}
+            src={currentUser.user.profileImageURL}
             alt="profile image"
             className="w-full h-full object-cover transform scale-110"
           />
         </div>
         <div className="text-s text-white">
-          <p className="font-bold">{guardianLoggedIn.user.name}</p>
+          <p className="font-bold">{currentUser.user.name}</p>
           <p className="flex gap-1 items-center justify-start mt-2">
             <svg
               className="h-5 !fill-white"
@@ -63,7 +67,7 @@ export default function GuardianDashboard() {
                 />
               </g>
             </svg>
-            {guardianLoggedIn.user.email}
+            {currentUser.user.email}
           </p>
           <p className="flex gap-1 items-center justify-start mt-2">
             <svg
@@ -104,7 +108,7 @@ export default function GuardianDashboard() {
                 strokeMiterlimit="4"
               />
             </svg>{" "}
-            {guardianLoggedIn.phone}
+            {currentUser.phone}
           </p>
           <p></p>
         </div>

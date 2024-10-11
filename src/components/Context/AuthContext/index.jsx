@@ -1,6 +1,7 @@
+// AuthContext.js
 import { useEffect, useState, createContext, useContext } from "react";
 import { auth } from "../../../firebase/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -10,28 +11,35 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [guardianLoggedIn, setGuardianLoggedIn] = useState(false);
+  const [carerLoggedIn, setCarerLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, initializeUser);
-    return unsubscribe;
+    setLoading(false);
+    // const unsubscribe = onAuthStateChanged(auth, (user) => {});
   }, []);
 
-  async function initializeUser(user) {
-    if (user) {
-      setCurrentUser({ ...user });
-      setUserLoggedIn(true);
-    } else {
-      setCurrentUser(null);
-      setUserLoggedIn(false);
-    }
-    setLoading(false);
+  function handleSignOut() {
+    signOut(auth)
+      .then(() => {
+        setCurrentUser(null);
+        setGuardianLoggedIn(false);
+        setCarerLoggedIn(false);
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
   }
 
   const value = {
     currentUser,
-    userLoggedIn,
+    setCurrentUser,
+    guardianLoggedIn,
+    setGuardianLoggedIn,
+    carerLoggedIn,
+    setCarerLoggedIn,
+    handleSignOut,
     loading,
   };
 

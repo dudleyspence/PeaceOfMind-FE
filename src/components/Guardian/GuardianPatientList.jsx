@@ -3,31 +3,38 @@ import { useContext } from "react";
 import { UserContext } from "../Context/UserContext";
 import { PatientProgressBar } from "../Patient/PatientTabs/PatientProgressBar";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+
 export default function GuardianPatientList() {
-  const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
+  const { currentUser } = useAuth();
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
-    if (guardianLoggedIn) {
-      setPatientsList(guardianLoggedIn.patients);
-      setIsLoading(false);
-    }
-    if (carerLoggedIn) {
-      setPatientsList(carerLoggedIn.patients);
-      setIsLoading(false);
-    }
-  }, [guardianLoggedIn, carerLoggedIn]);
+    setPatientsList(currentUser.patients);
+    setIsLoading(false);
+  }, [currentUser]);
 
   function handlePatientClick(patient_id) {
     navigate(`/patient/${patient_id}`);
   }
 
-  return isLoading ? (
-    "Loading patients"
-  ) : (
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (patientsList.length === 0) {
+    return (
+      <div>
+        <p>You dont yet have any patients.</p>
+        <p> Click above to add a new patient</p>
+      </div>
+    );
+  }
+
+  return (
     <div className="w-full">
       <ul className="flex flex-col justify-center items-center text-black">
         <p className="text-center">Click below to check in with:</p>

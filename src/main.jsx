@@ -6,13 +6,16 @@ import { UserProvider } from "./components/Context/UserContext";
 import { Provider } from "react-redux";
 import store from "../src/state/store.js";
 import "preline";
+import { AuthProvider } from "./components/Context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <BrowserRouter>
-      <UserProvider>
-        <App />
-      </UserProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </BrowserRouter>
+    </AuthProvider>
   </Provider>
 );

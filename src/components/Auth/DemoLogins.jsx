@@ -4,39 +4,72 @@ import {
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
   IconButton,
   Typography,
   MenuItem,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { doSignInWithEmailAndPassword } from "../../firebase/auth";
+import { useAuth } from "../Context/AuthContext";
 
-export function SignUpType() {
-  const [open, setOpen] = useState(false);
+import { getUserByFirebaseUID } from "../../axios/index.axios";
+
+export function DemoLogins() {
+  const [open, setOpen] = useState(true);
   const navigate = useNavigate();
+  const { setGuardianLoggedIn, setCarerLoggedIn, setCurrentUser } = useAuth();
+
+  function onSubmit(role) {
+    let email = "";
+    let password = "";
+    if (role === "guardian") {
+      email = "jane.smith@example.com";
+      password = "password";
+    } else if (role === "carer") {
+      email = "john.doe@example.com";
+      password = "password";
+    } else {
+      console.error("Invalid role selected");
+      return;
+    }
+
+    doSignInWithEmailAndPassword(email, password)
+      .then(({ user }) => {
+        getUserByFirebaseUID(user.uid).then((populatedUser) => {
+          setCurrentUser(populatedUser);
+          if (populatedUser.user.role === "guardian") {
+            setGuardianLoggedIn(true);
+            setCarerLoggedIn(false);
+          }
+          if (populatedUser.user.role === "carer") {
+            setGuardianLoggedIn(false);
+            setCarerLoggedIn(true);
+          }
+          navigate(`/dashboard`);
+        });
+      })
+      .catch((error) => {
+        console.error("Error signing in:", error);
+      });
+  }
 
   const handleOpen = () => setOpen((cur) => !cur);
 
   return (
     <>
-      <Typography
+      <Button
         component="div"
         className="cursor-pointer font-bold"
         onClick={handleOpen}
       >
-        Sign Up
-      </Typography>
+        Demo Users
+      </Button>
       <Dialog size="md" open={open} handler={handleOpen}>
         <DialogHeader className="justify-between">
-          <div>
-            <Typography variant="h3" color="blue-gray">
-              Account Type
-            </Typography>
-            <Typography color="black" variant="h6">
-              Select which account type you'd like to sign up with
-            </Typography>
-          </div>
+          <Typography variant="h3" color="blue-gray">
+            How would you like to log in?
+          </Typography>
           <IconButton
             color="black"
             size="sm"
@@ -61,10 +94,10 @@ export function SignUpType() {
         </DialogHeader>
         <DialogBody className="overflow-y-scroll !px-5">
           <div className="mb-6">
-            <ul className="mt-3 -ml-2 flex flex-col gap-3">
+            <ul className="mt-3 flex flex-col justify-center items-center gap-3">
               <MenuItem
                 onClick={() => {
-                  navigate("/SignUp/guardian");
+                  onSubmit("guardian");
                 }}
                 className="mb-4 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50 hover:bg-teal-200"
               >
@@ -101,14 +134,15 @@ export function SignUpType() {
                   color="blue-gray"
                   variant="h5"
                 >
-                  Guardian Account
+                  Demo Guardian Account
                 </Typography>
               </MenuItem>
+
               <MenuItem
                 onClick={() => {
-                  navigate("/SignUp/carer");
+                  onSubmit("carer");
                 }}
-                className="mb-1 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50  hover:bg-teal-200"
+                className="mb-4 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50  hover:bg-teal-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +249,22 @@ export function SignUpType() {
                   color="blue-gray"
                   variant="h5"
                 >
-                  Carer Account
+                  Demo Carer Account
+                </Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleOpen();
+                  navigate("/login");
+                }}
+                className="flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50 hover:bg-teal-200"
+              >
+                <Typography
+                  className="uppercase"
+                  color="blue-gray"
+                  variant="h5"
+                >
+                  Standard Login or Sign Up
                 </Typography>
               </MenuItem>
             </ul>

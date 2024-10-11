@@ -11,7 +11,11 @@ import PeaceOfMindLogo from "../../assets/Logo/PeaceOfMind_logo_small.png";
 import { useState } from "react";
 import { doSignInWithGoogle } from "../../firebase/auth";
 import { ErrorTab } from "../General/ErrorTab";
-import addNewUser from "../../axios/index.axios";
+import { addNewUser } from "../../axios/index.axios";
+import { doCreateUserWithEmailAndPassword } from "../../firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+import { getUserByFirebaseUID } from "../../axios/index.axios";
 
 export function SignUpPage() {
   const { role } = useParams();
@@ -22,37 +26,68 @@ export function SignUpPage() {
   const [isAcceptingTerms, setIsAcceptingTerms] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const { setGuardianLoggedIn, setCarerLoggedIn, setCurrentUser } = useAuth();
+
+  /*
+
+   Current considerations: As the code is now the user can sign up and this creates a firebase user and following this the user will be added to the database.
+   - This can lead to a few potential issues: if the backend for some reason was down and a user tries to sign up then they will create a firebase user but not add them to the database.
+   - To avoid this, I can either move the firebase user creation to the backend or use firebase's cloud functions to handle the database operations of adding a new user.
+
+  */
 
   function onSubmit(event) {
     event.preventDefault();
     setErrorMessage("");
+
     if (!email || !password || !name || !confirmPassword || !isAcceptingTerms) {
       setErrorMessage("All fields are required");
       return;
     }
 
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
     if (!isRegistering) {
-      if (password !== confirmPassword) {
-        setErrorMessage("Passwords do not match");
-        return;
-      }
-
       setIsRegistering(true);
-
       doCreateUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-          const user = userCredential.user;
+          const firebaseUser = userCredential.user;
 
-          return addNewUser(user.uid, name, email, role);
+          return addNewUser(firebaseUser.uid, name, email, role);
         })
-        .then(() => {
-          navigate("/");
+        .then(({ user }) => {
+          return getUserByFirebaseUID(user.firebaseUID);
+        })
+        .then((populatedUser) => {
+          setCurrentUser(populatedUser);
+          if (populatedUser.user.role === "guardian") {
+            setGuardianLoggedIn(true);
+            setCarerLoggedIn(false);
+          }
+          if (populatedUser.user.role === "carer") {
+            setGuardianLoggedIn(false);
+            setCarerLoggedIn(true);
+          }
+          setIsRegistering(false);
+          navigate(`/dashboard`);
         })
         .catch((error) => {
-          console.error("Error during sign-up process:", error);
-          setErrorMessage(error.message);
-        })
-        .finally(() => {
+          console.log(typeof error.message);
+          if (error.message.includes("invalid-email")) {
+            setErrorMessage("Invalid email format");
+          } else if (error.message.includes("weak-password")) {
+            setErrorMessage("Password is too weak");
+          } else if (error.message.includes("email-already-in-use")) {
+            setErrorMessage("Email already in use");
+          } else {
+            console.error("Unknown error during sign-up process:", error);
+            setErrorMessage("An error occurred");
+          }
           setIsRegistering(false);
         });
     }
@@ -67,19 +102,35 @@ export function SignUpPage() {
           const user = result.user;
           console.log(result._tokenResponse.isNewUser);
           if (result._tokenResponse.isNewUser) {
-            saveNewUser(user.uid, user.displayName, user.email, role)
-              .then((response) => {
-                console.log("new user saved to the database:", response);
-              })
-              .catch((err) => {
-                console.error(err);
-              });
+            return addNewUser(
+              user.uid,
+              user.displayName,
+              user.email,
+              role,
+              user.photoURL
+            ).then(({ user }) => {
+              return user.firebaseUID;
+            });
           } else {
             console.log("existing user signed in");
+            return user.uid;
           }
         })
-        .catch((err) => {
+        .then((firebaseUID) => {
+          return getUserByFirebaseUID(firebaseUID);
+        })
+        .then((populatedUser) => {
+          setCurrentUser(populatedUser);
+          if (populatedUser.user.role === "guardian") {
+            setGuardianLoggedIn(true);
+            setCarerLoggedIn(false);
+          }
+          if (populatedUser.user.role === "carer") {
+            setGuardianLoggedIn(false);
+            setCarerLoggedIn(true);
+          }
           setIsRegistering(false);
+          navigate(`/dashboard`);
         });
     }
   }
@@ -116,7 +167,7 @@ export function SignUpPage() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               size="md sm:lg"
-              placeholder="name@mail.com"
+              placeholder="Full Name"
               className="bg-white !text-[16px] !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
@@ -194,7 +245,7 @@ export function SignUpPage() {
             disabled={!isAcceptingTerms}
             type="submit"
           >
-            sign up
+            {isRegistering ? "Signing Up..." : "Sign Up"}
           </Button>
           <div className="flex flex-row justify-center items-center gap-5 my-6">
             <IconButton

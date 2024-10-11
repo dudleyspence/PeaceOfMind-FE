@@ -1,7 +1,6 @@
 import {
   Card,
   Input,
-  Checkbox,
   IconButton,
   Button,
   Typography,
@@ -9,54 +8,62 @@ import {
 import { SignUpType } from "./SignUpType";
 import PeaceOfMindLogo from "../../assets/Logo/PeaceOfMind_logo_small.png";
 import { useState } from "react";
-import {
-  doSignInWithGoogle,
-  doSignInWithEmailAndPassword,
-} from "../../firebase/auth";
+import { doSignInWithEmailAndPassword } from "../../firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+import { getUserByFirebaseUID } from "../../axios/index.axios";
+import { SignUpTypeForGoogle } from "./SignUpTypeForGoogle";
+import { DemoLogins } from "./DemoLogins";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const { setGuardianLoggedIn, setCarerLoggedIn, setCurrentUser } = useAuth();
+  const [openPromptGoogle, setOpenPromptGoogle] = useState(false);
+
+  const navigate = useNavigate();
 
   function onSubmit(event) {
     event.preventDefault();
     if (!isSigningIn) {
       setIsSigningIn(true);
-      doSignInWithEmailAndPassword(email, password).then((response) => {
-        console.log("login success");
-      });
-    }
-  }
-
-  function onGoogleSignIn(event) {
-    event.preventDefault;
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      doSignInWithGoogle()
-        .then((result) => {
-          const user = result.user;
-          console.log(result._tokenResponse.isNewUser);
-          if (result._tokenResponse.isNewUser) {
-            saveNewUser(user.uid, user.displayName, user.email)
-              .then((response) => {
-                console.log("new user saved to the database:", response);
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-          } else {
-            console.log("existing user signed in");
-          }
+      doSignInWithEmailAndPassword(email, password)
+        .then(({ user }) => {
+          getUserByFirebaseUID(user.uid).then((populatedUser) => {
+            setCurrentUser(populatedUser);
+            if (populatedUser.user.role === "guardian") {
+              setGuardianLoggedIn(true);
+              setCarerLoggedIn(false);
+            }
+            if (populatedUser.user.role === "carer") {
+              setGuardianLoggedIn(false);
+              setCarerLoggedIn(true);
+            }
+            setIsSigningIn(false);
+            navigate(`/dashboard`);
+          });
         })
-        .catch((err) => {
-          setIsSigningIn(false);
+        .catch((error) => {
+          console.error("Error signing in:", error);
+          if (error.code === "auth/wrong-password") {
+            alert("Incorrect password. Please try again.");
+          } else if (error.code === "auth/user-not-found") {
+            alert("User not found. Please sign up first.");
+          } else if (error.code === "auth/invalid-email") {
+            alert("Invalid email format. Please try again.");
+          }
         });
     }
   }
 
   return (
-    <div className="flex justify-center items-center h-screen ">
+    <div className="flex flex-col gap-4 justify-center items-center h-screen ">
+      <SignUpTypeForGoogle
+        openPromptGoogle={openPromptGoogle}
+        setOpenPromptGoogle={setOpenPromptGoogle}
+      />
+      <DemoLogins />
       <Card shadow={false} className="bg-blue-100 p-5 max-w-[95%]">
         <div className="flex flex-row justify-between">
           <Typography variant="h4" color="black">
@@ -112,8 +119,8 @@ export function LoginPage() {
           <div className="flex flex-row justify-center items-center gap-5 my-6">
             <IconButton
               disabled={isSigningIn}
-              onClick={(e) => {
-                onGoogleSignIn(e);
+              onClick={() => {
+                setOpenPromptGoogle(true);
               }}
               className="rounded bg-[#ea4335] hover:shadow-[#ea4335]/20 focus:shadow-[#ea4335]/20 active:shadow-[#ea4335]/10"
             >

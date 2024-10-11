@@ -12,24 +12,12 @@ import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
 import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
 import { LoginPage } from "./components/Auth/LoginPage";
 import { SignUpPage } from "./components/Auth/SignUpPage";
+import { useAuth } from "./components/Context/AuthContext";
 
 function App() {
-  const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [userLoggedIn, setUserLoggedIn] = useState(null);
+  const { guardianLoggedIn, carerLoggedIn, loading } = useAuth();
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (guardianLoggedIn) {
-      setUserLoggedIn("guardian");
-    }
-    if (carerLoggedIn) {
-      setUserLoggedIn("carer");
-    }
-    setIsLoading(false);
-  }, [guardianLoggedIn, carerLoggedIn]);
-
-  return isLoading ? (
+  return loading ? (
     "Loading"
   ) : (
     <div className="bg-backgroundCream min-h-screen box-border px-3">

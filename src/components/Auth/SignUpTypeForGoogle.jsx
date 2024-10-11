@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -11,22 +11,70 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
+import { doSignInWithGoogle } from "../../firebase/auth";
+import { getUserByFirebaseUID } from "../../axios/index.axios";
+import { addNewUser } from "../../axios/index.axios";
 
-export function SignUpType() {
+export function SignUpTypeForGoogle({ openPromptGoogle, setOpenPromptGoogle }) {
+  const { setGuardianLoggedIn, setCarerLoggedIn, setCurrentUser } = useAuth();
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  function onGoogleSignIn(role) {
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      doSignInWithGoogle()
+        .then((result) => {
+          const user = result.user;
+          console.log(user);
+          console.log(result._tokenResponse.isNewUser);
+          if (result._tokenResponse.isNewUser) {
+            return addNewUser(
+              user.uid,
+              user.displayName,
+              user.email,
+              role,
+              user.photoURL
+            ).then(({ user }) => {
+              return user.firebaseUID;
+            });
+          } else {
+            console.log("existing user signed in");
+            return user.uid;
+          }
+        })
+        .then((firebaseUID) => {
+          return getUserByFirebaseUID(firebaseUID);
+        })
+        .then((populatedUser) => {
+          setCurrentUser(populatedUser);
+          if (populatedUser.user.role === "guardian") {
+            setGuardianLoggedIn(true);
+            setCarerLoggedIn(false);
+          }
+          if (populatedUser.user.role === "carer") {
+            setGuardianLoggedIn(false);
+            setCarerLoggedIn(true);
+          }
+          setIsSigningIn(false);
+          navigate(`/dashboard`);
+        });
+    }
+  }
+
+  useEffect(() => {
+    if (openPromptGoogle) {
+      setOpen(true);
+    }
+    setOpenPromptGoogle(false);
+  }, [openPromptGoogle]);
 
   const handleOpen = () => setOpen((cur) => !cur);
 
   return (
     <>
-      <Typography
-        component="div"
-        className="cursor-pointer font-bold"
-        onClick={handleOpen}
-      >
-        Sign Up
-      </Typography>
       <Dialog size="md" open={open} handler={handleOpen}>
         <DialogHeader className="justify-between">
           <div>
@@ -64,7 +112,7 @@ export function SignUpType() {
             <ul className="mt-3 -ml-2 flex flex-col gap-3">
               <MenuItem
                 onClick={() => {
-                  navigate("/SignUp/guardian");
+                  onGoogleSignIn("guardian");
                 }}
                 className="mb-4 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50 hover:bg-teal-200"
               >
@@ -106,7 +154,7 @@ export function SignUpType() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigate("/SignUp/carer");
+                  onGoogleSignIn("carer");
                 }}
                 className="mb-1 flex items-center justify-center gap-3 !py-6 shadow-lg  bg-teal-50  hover:bg-teal-200"
               >
