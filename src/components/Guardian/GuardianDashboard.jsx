@@ -11,6 +11,8 @@ import { useAuth } from "../Context/AuthContext";
 
 export default function GuardianDashboard() {
   const { guardianLoggedIn, currentUser } = useAuth();
+  console.log(currentUser);
+  console.log(guardianLoggedIn);
 
   const [isLoading, setIsLoading] = useState(true);
 

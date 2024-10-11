@@ -8,6 +8,7 @@ import {
   selectCommentsError,
   addComment,
 } from "../../../state/slices/commentsSlice";
+import { useAuth } from "../../Context/AuthContext";
 
 export function CommentInput() {
   const [commentInput, setCommentInput] = useState("");
@@ -19,8 +20,8 @@ export function CommentInput() {
   const isLoading = useSelector(selectCommentsLoading);
   const error = useSelector(selectCommentsError);
 
-  const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
-  const author = guardianLoggedIn ? guardianLoggedIn._id : carerLoggedIn._id;
+  const { currentUser, guardianLoggedIn } = useAuth();
+  const author = currentUser._id;
   const authorType = guardianLoggedIn ? "Guardian" : "Carer";
 
   function handlePostComment() {
