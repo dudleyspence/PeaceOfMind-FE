@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-const withMT = require("@material-tailwind/react/utils/withMT");
+import withMT from "@material-tailwind/react/utils/withMT";
+import preline from "preline/plugin";
 
 export default withMT({
   content: ["./src/**/*.{js,jsx,ts,tsx}", "node_modules/preline/dist/*.js"],
@@ -23,7 +24,7 @@ export default withMT({
       },
     },
   },
-  plugins: [require("preline/plugin")],
+  plugins: [preline],
 });
 
 // fdf3e8
