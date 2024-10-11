@@ -5,7 +5,6 @@ import "./stylesheets/index.css";
 import { UserProvider } from "./components/Context/UserContext";
 import { Provider } from "react-redux";
 import store from "../src/state/store.js";
-import "preline";
 import { AuthProvider } from "./components/Context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
