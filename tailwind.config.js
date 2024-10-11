@@ -1,9 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 import withMT from "@material-tailwind/react/utils/withMT";
-import preline from "preline/plugin";
 
 export default withMT({
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "node_modules/preline/dist/*.js"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontSize: {
       sm: "0.5rem",
@@ -24,7 +23,7 @@ export default withMT({
       },
     },
   },
-  plugins: [preline],
+  plugins: [],
 });
 
 // fdf3e8
