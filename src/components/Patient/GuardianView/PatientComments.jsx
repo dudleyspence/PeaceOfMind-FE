@@ -1,38 +1,22 @@
 import React, { useEffect, useState } from "react";
-
+import { getPatientComments } from "../../../axios/comments.axios";
 import { CommentInput } from "./CommentInput";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectComments,
-  selectCommentsError,
-  selectCommentsLoading,
-} from "../../../state/slices/commentsSlice";
-import { selectPatient } from "../../../state/slices/patientSlice";
 
-export default function PatientComments() {
-  const patient = useSelector(selectPatient);
-
-  const comments = useSelector(selectComments);
-  const isLoading = useSelector(selectCommentsLoading);
-  const error = useSelector(selectCommentsError);
-
-  const dispatch = useDispatch();
+export default function PatientComments({ patient_id }) {
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!comments) {
-      dispatch(fetchComments(patient._id));
-    }
-  }, [dispatch, patient._id, comments]);
+    setIsLoading(true);
+    getPatientComments(patient_id).then((comments) => {
+      setComments(comments);
+      setIsLoading(false);
+    });
+  }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
-
-  return (
+  return isLoading ? (
+    "Loading"
+  ) : (
     <div className="text-base bg-teal-100 p-3 rounded-lg shadow-xl w-full max-w-96">
       <div className="max-h-56 overflow-scroll">
         {comments.length > 0
@@ -58,7 +42,11 @@ export default function PatientComments() {
             ))
           : "There isn't any notes yet for this day"}
       </div>
-      <CommentInput />
+      <CommentInput
+        patient_id={patient_id}
+        comments={comments}
+        setComments={setComments}
+      />
     </div>
   );
 }

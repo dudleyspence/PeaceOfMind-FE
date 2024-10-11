@@ -1,27 +1,19 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { getPatientByPatientId } from "../../../axios/patient.axios";
-import { getTasksForSpecificDay } from "../../../axios/task.axios";
-import ProgressTab from "../PatientTabs/PatientProgressTab";
-import noTasks from "../../../assets/patient/NoTasks.png";
-import { DayViewPagination } from "./DayViewPagination";
-import ViewTaskNotes from "../GuardianView/CarePlanPage/ViewTaskNotes";
+import { getTaskTemplatesByPatientId } from "../../axios/task.axios";
+import { EditRecurringTask } from "../Patient/GuardianView/CarePlanPage/EditRecurringTask";
+import React from "react";
 
-export default function GuardianDayReview() {
-  const [patient, setPatient] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [tasks, setTasks] = useState([]);
-  const [completionPercentage, setCompletionPercentage] = useState(0);
-  const [totalTasks, setTotalTasks] = useState(0);
-  const [carer, setCarer] = useState(() => {
-    if (patient) {
-      return patient.carers[0];
-    } else {
-      setIsLoading(true);
-      return null;
-    }
-  });
-  const { patient_id, isoDate } = useParams();
+import {
+  Drawer,
+  Button,
+  Typography,
+  IconButton,
+} from "@material-tailwind/react";
+
+export default function RepeatingTasksList({ patient_id }) {
+  const [openRight, setOpenRight] = React.useState(false);
+  const openDrawerRight = () => setOpenRight(true);
+  const closeDrawerRight = () => setOpenRight(false);
 
   const sortedTasks = {
     Meals: [],
@@ -29,7 +21,6 @@ export default function GuardianDayReview() {
     Medical: [],
     Exercise: [],
     Additional: [],
-    "Day Specific": [],
   };
 
   const intervalColors = {
@@ -37,157 +28,67 @@ export default function GuardianDayReview() {
     Weekly: "bg-green-200",
     Biweekly: "bg-red-200",
     Monthly: "bg-purple-200",
-    None: "bg-white text-bold",
   };
+
+  const [repeatingTasks, setRepeatingTasks] = useState(sortedTasks);
+  const [isLoading, setIsLoading] = useState(true);
+  const [taskUpdates, setTaskUpdates] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    getPatientByPatientId(patient_id).then((patient) => {
-      setPatient(patient);
-      setCarer(patient.carers[0]);
-      getTasksForSpecificDay(patient_id, isoDate).then((tasks) => {
-        setIsLoading(false);
-
-        tasks.forEach((task) => {
-          if (!task.template.category) {
-            task.template.category = "Day Specific";
-            const date = new Date(task.scheduleDate);
-            task.time = date.toLocaleTimeString("en-GB", {
-              hour: "numeric",
-              minute: "2-digit",
-              hour12: true,
-            });
-          }
-          sortedTasks[task.template.category].push(task);
-        });
-        const totalTasks = tasks.length;
-        setTotalTasks(totalTasks);
-        const completed = tasks.filter((task) => task.isCompleted).length;
-        const completePercentage =
-          (completed / totalTasks) * 100 ? (completed / totalTasks) * 100 : 0;
-        setCompletionPercentage(completePercentage);
-        setTasks(sortedTasks);
-        console.log(tasks);
+    setTaskUpdates(false);
+    getTaskTemplatesByPatientId(patient_id).then((tasks) => {
+      tasks.forEach((task) => {
+        sortedTasks[task.category].push(task);
       });
+      setIsLoading(false);
+
+      setRepeatingTasks(sortedTasks);
     });
-  }, [isoDate]);
+  }, [taskUpdates, patient_id]);
 
   return isLoading ? (
     "loading"
   ) : (
-    <div className="p-2 flex flex-col gap-4 pb-10 justify-center items-center w-full">
-      <DayViewPagination />
-      <ProgressTab
-        chosenDate={isoDate}
-        completionPercentage={completionPercentage}
-      />
-      {console.log(totalTasks)}
-      <div className="bg-pink-100 p-3 rounded-lg max-w-96 w-full">
-        {totalTasks === 0 ? (
-          <div className="w-full h-full flex flex-col gap-3 justify-center items-center">
-            <img src={noTasks} alt="No Tasks images" className="h-32 w-32" />
-            <h1 className="text-black m-2">
-              There is nothing scheduled for today
-            </h1>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-5 text-black">
-            {tasks["Day Specific"].length > 0 && (
-              <ul
-                id="Day Specific"
-                className="bg-yellow-100 p-5 rounded-lg shadow-lg"
-              >
-                <div className="flex flex-row items-center gap-2 justify-start">
-                  <svg
-                    fill="#000000"
-                    className="w-6"
-                    version="1.1"
-                    id="Capa_1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 612 612"
-                    xmlSpacepace="preserve"
-                  >
-                    <g>
-                      <g>
-                        <path
-                          d="M612,463.781c0-70.342-49.018-129.199-114.75-144.379c-10.763-2.482-21.951-3.84-33.469-3.84
-			c-3.218,0-6.397,0.139-9.562,0.34c-71.829,4.58-129.725,60.291-137.69,131.145c-0.617,5.494-0.966,11.073-0.966,16.734
-			c0,10.662,1.152,21.052,3.289,31.078C333.139,561.792,392.584,612,463.781,612C545.641,612,612,545.641,612,463.781z
-			 M463.781,561.797c-54.133,0-98.016-43.883-98.016-98.016s43.883-98.016,98.016-98.016s98.016,43.883,98.016,98.016
-			S517.914,561.797,463.781,561.797z"
-                        />
-                        <polygon
-                          points="482.906,396.844 449.438,396.844 449.438,449.438 396.844,449.438 396.844,482.906 482.906,482.906 
-			482.906,449.438 482.906,449.438 		"
-                        />
-                        <path
-                          d="M109.969,0c-9.228,0-16.734,7.507-16.734,16.734v38.25v40.641c0,9.228,7.506,16.734,16.734,16.734h14.344
-			c9.228,0,16.734-7.507,16.734-16.734V54.984v-38.25C141.047,7.507,133.541,0,124.312,0H109.969z"
-                        />
-                        <path
-                          d="M372.938,0c-9.228,0-16.734,7.507-16.734,16.734v38.25v40.641c0,9.228,7.507,16.734,16.734,16.734h14.344
-			c9.228,0,16.734-7.507,16.734-16.734V54.984v-38.25C404.016,7.507,396.509,0,387.281,0H372.938z"
-                        />
-                        <path
-                          d="M38.25,494.859h236.672c-2.333-11.6-3.572-23.586-3.572-35.859c0-4.021,0.177-7.999,0.435-11.953H71.719
-			c-15.845,0-28.688-12.843-28.688-28.688v-229.5h411.188v88.707c3.165-0.163,6.354-0.253,9.562-0.253
-			c11.437,0,22.61,1.109,33.469,3.141V93.234c0-21.124-17.126-38.25-38.25-38.25h-31.078v40.641c0,22.41-18.23,40.641-40.641,40.641
-			h-14.344c-22.41,0-40.641-18.231-40.641-40.641V54.984H164.953v40.641c0,22.41-18.231,40.641-40.641,40.641h-14.344
-			c-22.41,0-40.641-18.231-40.641-40.641V54.984H38.25C17.126,54.984,0,72.111,0,93.234v363.375
-			C0,477.733,17.126,494.859,38.25,494.859z"
-                        />
-                        <circle cx="134.774" cy="260.578" r="37.954" />
-                        <circle cx="248.625" cy="260.578" r="37.954" />
-                        <circle cx="362.477" cy="260.578" r="37.954" />
-                        <circle cx="248.625" cy="375.328" r="37.953" />
-                        <circle cx="134.774" cy="375.328" r="37.953" />
-                      </g>
-                    </g>
-                  </svg>
-                  <h3 className="underline font-bold text-base">
-                    Appointments and Day Specific tasks
-                  </h3>
-                </div>
+    <React.Fragment>
+      <div className="bg-red-200 rounded-lg p-3">
+        <h1 className="font-bold mb-3">Care Plan Controls:</h1>
+        <div className="flex flex-row gap-4 max-h-14">
+          <Button onClick={openDrawerRight}>View Current Routine</Button>
+          <Button>Add new task</Button>
+        </div>
+      </div>
 
-                {tasks["Day Specific"].map((task) => (
-                  <li
-                    key={task._id}
-                    className="flex flex-row gap-2 items-center mt-3"
-                  >
-                    <p
-                      className={
-                        intervalColors[task.template.repeatInterval] +
-                        " py-1 px-2 shadow-md rounded text-sm"
-                      }
-                    >
-                      {task.time}
-                    </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.template.notes && (
-                      <ViewTaskNotes notes={task.template.notes} />
-                    )}
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {tasks.Meals.length > 0 && (
+      <Drawer
+        placement="right"
+        open={openRight}
+        onClose={closeDrawerRight}
+        className="p-4 overflow-scroll bg-cyan-900"
+        size={400}
+      >
+        <div className="mb-6 flex flex-col items-center justify-between ">
+          <div className="mb-5 px-3 flex flex-row items-center justify-between w-full">
+            <Typography variant="h5" color="white">
+              Core Tasks
+            </Typography>
+            <IconButton variant="text" color="white" onClick={closeDrawerRight}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="h-5 w-5 fill-white cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </IconButton>
+          </div>
+          <div className="flex flex-col gap-6">
+            {repeatingTasks.Meals.length > 0 && (
               <ul id="Meals" className="bg-white p-5 rounded-lg shadow-lg">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
@@ -274,41 +175,29 @@ export default function GuardianDayReview() {
                   <h3 className="underline font-bold">Meals</h3>
                 </div>
 
-                {tasks.Meals.map((task) => (
+                {repeatingTasks.Meals.map((task) => (
                   <li
                     key={task._id}
                     className="flex flex-row gap-2 items-center mt-3"
                   >
                     <p
                       className={
-                        intervalColors[task.template.repeatInterval] +
+                        intervalColors[task.repeatInterval] +
                         " py-1 px-2 shadow-md rounded text-sm"
                       }
                     >
-                      {task.template.repeatInterval}
+                      {task.repeatInterval}
                     </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
+                    <p>{task.text}</p>
+                    <EditRecurringTask
+                      task={task}
+                      setTaskUpdates={setTaskUpdates}
+                    />
                   </li>
                 ))}
               </ul>
             )}
-            {tasks.Medical.length > 0 && (
+            {repeatingTasks.Medical.length > 0 && (
               <ul id="Medical" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
@@ -342,41 +231,29 @@ export default function GuardianDayReview() {
                   <h3 className="underline font-bold">Medical</h3>
                 </div>
 
-                {tasks.Medical.map((task) => (
+                {repeatingTasks.Medical.map((task) => (
                   <li
                     key={task._id}
                     className="flex flex-row gap-2 items-center mt-3"
                   >
                     <p
                       className={
-                        intervalColors[task.template.repeatInterval] +
+                        intervalColors[task.repeatInterval] +
                         " py-1 px-2 shadow-md rounded text-sm"
                       }
                     >
-                      {task.template.repeatInterval}
+                      {task.repeatInterval}
                     </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
+                    <p>{task.text}</p>
+                    <EditRecurringTask
+                      task={task}
+                      setTaskUpdates={setTaskUpdates}
+                    />
                   </li>
                 ))}
               </ul>
             )}
-            {tasks.Hygiene.length > 0 && (
+            {repeatingTasks.Hygiene.length > 0 && (
               <ul id="Hygeine" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
@@ -435,41 +312,29 @@ export default function GuardianDayReview() {
                   <h3 className="underline font-bold">Hygiene</h3>
                 </div>
 
-                {tasks.Hygiene.map((task) => (
+                {repeatingTasks.Hygiene.map((task) => (
                   <li
                     key={task._id}
                     className="flex flex-row gap-2 items-center mt-3"
                   >
                     <p
                       className={
-                        intervalColors[task.template.repeatInterval] +
+                        intervalColors[task.repeatInterval] +
                         " py-1 px-2 shadow-md rounded text-sm"
                       }
                     >
-                      {task.template.repeatInterval}
+                      {task.repeatInterval}
                     </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
+                    <p>{task.text}</p>
+                    <EditRecurringTask
+                      task={task}
+                      setTaskUpdates={setTaskUpdates}
+                    />
                   </li>
                 ))}
               </ul>
             )}
-            {tasks.Exercise.length > 0 && (
+            {repeatingTasks.Exercise.length > 0 && (
               <ul id="Exercise" className="bg-white p-5 rounded-lg shadow-lg ">
                 <div className="flex flex-row items-center gap-1 justify-start">
                   <svg
@@ -493,41 +358,29 @@ export default function GuardianDayReview() {
                   <h3 className="underline font-bold">Exercise</h3>
                 </div>
 
-                {tasks.Exercise.map((task) => (
+                {repeatingTasks.Exercise.map((task) => (
                   <li
                     key={task._id}
                     className="flex flex-row gap-2 items-center mt-3"
                   >
                     <p
                       className={
-                        intervalColors[task.template.repeatInterval] +
+                        intervalColors[task.repeatInterval] +
                         " py-1 px-2 shadow-md rounded text-sm"
                       }
                     >
-                      {task.template.repeatInterval}
+                      {task.repeatInterval}
                     </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
+                    <p>{task.text}</p>
+                    <EditRecurringTask
+                      task={task}
+                      setTaskUpdates={setTaskUpdates}
+                    />
                   </li>
                 ))}
               </ul>
             )}
-            {tasks.Additional.length > 0 && (
+            {repeatingTasks.Additional.length > 0 && (
               <ul
                 id="Additional"
                 className="bg-white p-5 rounded-lg shadow-lg "
@@ -595,43 +448,31 @@ export default function GuardianDayReview() {
                   <h3 className="underline font-bold">Additional</h3>
                 </div>
 
-                {tasks.Additional.map((task) => (
+                {repeatingTasks.Additional.map((task) => (
                   <li
                     key={task._id}
                     className="flex flex-row gap-2 items-center mt-3"
                   >
                     <p
                       className={
-                        intervalColors[task.template.repeatInterval] +
+                        intervalColors[task.repeatInterval] +
                         " py-1 px-2 shadow-md rounded text-sm"
                       }
                     >
-                      {task.template.repeatInterval}
+                      {task.repeatInterval}
                     </p>
-                    <p className={task.isCompleted ? "text-gray-600" : ""}>
-                      {task.template.text}
-                    </p>
-                    {task.isCompleted && (
-                      <svg
-                        className="h-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 48 48"
-                      >
-                        <path
-                          fill="#43A047"
-                          d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"
-                        ></path>
-                      </svg>
-                    )}
+                    <p>{task.text}</p>
+                    <EditRecurringTask
+                      task={task}
+                      setTaskUpdates={setTaskUpdates}
+                    />
                   </li>
                 ))}
               </ul>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </Drawer>
+    </React.Fragment>
   );
 }

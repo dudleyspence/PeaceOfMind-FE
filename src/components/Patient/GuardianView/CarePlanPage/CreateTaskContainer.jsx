@@ -17,8 +17,8 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { CreateRoutineTask } from "./RoutinePlan/CreateRoutineTask";
-import { CreateDaySpecificTask } from "./SchedulePlan/CreateDaySpecificTask";
+import { CreateRoutineTask } from "./CreateRoutineTask";
+import { CreateDaySpecificTask } from "./CreateDaySpecificTask";
 
 export function CreateTaskContainer({ patient, setTaskUpdates }) {
   const [open, setOpen] = React.useState(false);
@@ -34,6 +34,7 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
           setOpen={setOpen}
           setShowAlert={setShowAlert}
           patient={patient}
+          setTaskUpdates={setTaskUpdates}
         />
       ),
     },

@@ -1,48 +1,36 @@
-import { Textarea, IconButton, useSelect } from "@material-tailwind/react";
+import { Textarea, IconButton } from "@material-tailwind/react";
 import { useState, useContext } from "react";
 import { UserContext } from "../../Context/UserContext";
-import { selectPatient } from "../../../state/slices/patientSlice";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectCommentsLoading,
-  selectCommentsError,
-  addComment,
-} from "../../../state/slices/commentsSlice";
+import { postComment } from "../../../axios/comments.axios";
 
-export function CommentInput() {
+export function CommentInput({ patient_id, setComments, comments }) {
   const [commentInput, setCommentInput] = useState("");
-  const dispatch = useDispatch();
-
-  const patient = useSelector(selectPatient);
-  const patient_id = patient?._id;
-
-  const isLoading = useSelector(selectCommentsLoading);
-  const error = useSelector(selectCommentsError);
-
   const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
-  const author = guardianLoggedIn ? guardianLoggedIn._id : carerLoggedIn._id;
-  const authorType = guardianLoggedIn ? "Guardian" : "Carer";
+  const [author] = useState(() => {
+    if (guardianLoggedIn) {
+      return guardianLoggedIn._id;
+    } else {
+      return carerLoggedIn._id;
+    }
+  });
+  const [authorType] = useState(() => {
+    if (guardianLoggedIn) {
+      return "Guardian";
+    } else {
+      return "Carer";
+    }
+  });
 
   function handlePostComment() {
-    if (commentInput !== "" && patient_id) {
-      dispatch(
-        addComment({
-          patient_id,
-          text: commentInput,
-          author,
-          authorType,
-        })
+    if (commentInput !== "") {
+      postComment(commentInput, patient_id, author, authorType).then(
+        (comment) => {
+          console.log("success", comment);
+          setCommentInput("");
+          setComments([...comments, comment]);
+        }
       );
-      setCommentInput("");
     }
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
   }
 
   return (

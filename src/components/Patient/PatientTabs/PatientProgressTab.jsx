@@ -1,29 +1,32 @@
 import React from "react";
 import { PatientProgressBar } from "./PatientProgressBar";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { formatISO } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
-export default function ProgressTab({ completionPercentage }) {
+export default function PatientProgressTab({
+  patient_id,
+  chosenDate,
+  completionPercentage,
+}) {
   const navigate = useNavigate();
-  const [isoFormatDate, setIsoFormatDate] = useState("");
-  const [displayDate, setDisplayDate] = useState("");
-  const { patient_id, isoDate } = useParams();
+  const [isoDate, setIsoDate] = useState("");
+  const [day, setDay] = useState("");
 
   useEffect(() => {
-    if (!isoDate) {
+    if (!chosenDate) {
       const date = new Date();
-      setIsoFormatDate(formatISO(date));
-      setDisplayDate("today");
+      date.setUTCDate(date.getUTCDate());
+      setIsoDate(date.toISOString());
+      setDay("today");
     } else {
-      const date = new Date(isoDate);
-      setIsoFormatDate(formatISO(date));
-      setDisplayDate(date.toDateString());
+      const date = new Date(chosenDate);
+      setIsoDate(date.toISOString());
+      setDay(date.toDateString());
     }
   }, [patient_id]);
 
   function handleClick() {
-    navigate(`/patient/${patient_id}/${isoFormatDate}`);
+    navigate(`/patient/${patient_id}/${isoDate}`);
   }
 
   return (
@@ -31,7 +34,7 @@ export default function ProgressTab({ completionPercentage }) {
       className="bg-green-200 p-5 rounded-lg max-w-96 text-black w-full"
       onClick={handleClick}
     >
-      <h1>Progress for {displayDate}</h1>
+      <h1>Progress for {day}</h1>
       <PatientProgressBar completionPercentage={completionPercentage} />
     </div>
   );

@@ -22,20 +22,15 @@ import {
   deleteTaskInstance,
   updateTaskInsance,
   updateTaskTemplate,
-} from "../../../../../axios/task.axios";
+} from "../../../../axios/task.axios";
 import { formatISO } from "date-fns";
-import { fetchScheduledTasks } from "../../../../../state/slices/carePlanSlice";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 
-export function EditScheduledTask({ task }) {
+export function EditScheduledTask({ task, setTaskUpdates }) {
   const [open, setOpen] = useState(false);
-  const { patient_id } = useParams();
   const [taskText, setTaskText] = useState(task.template.text);
   const [scheduleDate, setScheduleDate] = useState(
     task.scheduleDate ? new Date(task.scheduleDate) : ""
   );
-  const dispatch = useDispatch();
   const [taskNotes, setTaskNotes] = useState(
     task.template.notes ? task.template.notes : ""
   );
@@ -58,7 +53,8 @@ export function EditScheduledTask({ task }) {
         return deleteTaskTemplate(task.template._id);
       })
       .then(() => {
-        dispatch(fetchScheduledTasks(patient_id));
+        setTaskUpdates(true);
+        console.log("Task Deleted");
         setOpen(!open);
       });
   }
@@ -76,11 +72,13 @@ export function EditScheduledTask({ task }) {
     }
 
     updateTaskTemplate(task.template._id, templateUpdate)
-      .then(() => {
+      .then((update) => {
+        console.log(update);
         return updateTaskInsance(task._id, instanceUpdate);
       })
-      .then(() => {
-        dispatch(fetchScheduledTasks(patient_id));
+      .then((update) => {
+        console.log(update);
+        setTaskUpdates(true);
         setOpen(!open);
       });
   }

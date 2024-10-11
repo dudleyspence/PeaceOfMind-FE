@@ -1,24 +1,21 @@
 import { useState, useEffect } from "react";
-import { getTaskTemplatesByPatientId } from "../../../../../axios/task.axios";
+import { getTaskTemplatesByPatientId } from "../../../../axios/task.axios";
 import { EditRecurringTask } from "./EditRecurringTask";
 import { format } from "date-fns";
-import ViewTaskNotes from "../ViewTaskNotes";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectCarePlanError,
-  selectCarePlanLoading,
-  selectRoutineTasks,
-} from "../../../../../state/slices/carePlanSlice";
-import { useParams } from "react-router-dom";
-import { fetchRoutineTasks } from "../../../../../state/slices/carePlanSlice";
+import ViewTaskNotes from "./ViewTaskNotes";
 
-export default function RoutineList() {
-  const { patient_id } = useParams();
-  const dispatch = useDispatch();
-
-  const isLoading = useSelector(selectCarePlanLoading);
-  const error = useSelector(selectCarePlanError);
-  const repeatingTasks = useSelector(selectRoutineTasks);
+export default function RoutineList({
+  patient_id,
+  taskUpdates,
+  setTaskUpdates,
+}) {
+  const sortedTasks = {
+    Meals: [],
+    Hygiene: [],
+    Medical: [],
+    Exercise: [],
+    Additional: [],
+  };
 
   const intervalColors = {
     Daily: "bg-blue-200",
@@ -27,20 +24,29 @@ export default function RoutineList() {
     Monthly: "bg-purple-200",
   };
 
+  const [repeatingTasks, setRepeatingTasks] = useState(sortedTasks);
+  const [isLoading, setIsLoading] = useState(true);
+
+  console.log(taskUpdates);
+
   useEffect(() => {
-    console.log(patient_id);
-    dispatch(fetchRoutineTasks(patient_id));
-  }, [dispatch, patient_id]);
+    setIsLoading(true);
+    setTaskUpdates(false);
+    getTaskTemplatesByPatientId(patient_id).then((tasks) => {
+      tasks.forEach((task) => {
+        if (task.category) {
+          sortedTasks[task.category].push(task);
+        }
+      });
+      setIsLoading(false);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+      setRepeatingTasks(sortedTasks);
+    });
+  }, [taskUpdates, patient_id]);
 
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
-
-  return (
+  return isLoading ? (
+    "loading"
+  ) : (
     <div className="bg-teal-800 p-3 flex flex-col gap-5 rounded-lg my-5 text-black">
       {repeatingTasks.Meals.length > 0 && (
         <ul id="Meals" className="bg-white p-5 rounded-lg shadow-lg">
@@ -151,7 +157,7 @@ export default function RoutineList() {
 
               {task.notes && <ViewTaskNotes notes={task.notes} />}
 
-              <EditRecurringTask task={task} />
+              <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
         </ul>
@@ -211,7 +217,7 @@ export default function RoutineList() {
               <p>{task.text}</p>
               {task.notes && <ViewTaskNotes notes={task.notes} />}
 
-              <EditRecurringTask task={task} />
+              <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
         </ul>
@@ -296,7 +302,7 @@ export default function RoutineList() {
               <p>{task.text}</p>
               {task.notes && <ViewTaskNotes notes={task.notes} />}
 
-              <EditRecurringTask task={task} />
+              <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
         </ul>
@@ -346,7 +352,7 @@ export default function RoutineList() {
               <p>{task.text}</p>
               {task.notes && <ViewTaskNotes notes={task.notes} />}
 
-              <EditRecurringTask task={task} />
+              <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
         </ul>
@@ -437,7 +443,7 @@ export default function RoutineList() {
               <p>{task.text}</p>
               {task.notes && <ViewTaskNotes notes={task.notes} />}
 
-              <EditRecurringTask task={task} />
+              <EditRecurringTask task={task} setTaskUpdates={setTaskUpdates} />
             </li>
           ))}
         </ul>

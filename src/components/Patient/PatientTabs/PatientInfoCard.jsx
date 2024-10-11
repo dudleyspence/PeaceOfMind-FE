@@ -1,27 +1,16 @@
 import React from "react";
-import { Collapse, Card, Typography, CardBody } from "@material-tailwind/react";
 import {
-  selectPatient,
-  selectPatientLoading,
-  selectPatientError,
-} from "../../../state/slices/patientSlice";
-import { useSelector } from "react-redux";
+  Collapse,
+  Button,
+  Card,
+  Typography,
+  CardBody,
+} from "@material-tailwind/react";
 
-export default function PatientInfoCard() {
+export default function PatientInfoCard({ patient }) {
   const [open, setOpen] = React.useState(false);
-  const patient = useSelector(selectPatient);
-  const isLoading = useSelector(selectPatientLoading);
-  const error = useSelector(selectPatientError);
 
   const toggleOpen = () => setOpen((cur) => !cur);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
   return (
     <div
       id="patient-profile"

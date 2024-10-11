@@ -9,31 +9,19 @@ import {
   DialogBody,
   DialogHeader,
   DialogFooter,
-  Chip,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { updatePatient } from "../../../../axios/patient.axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectPatient,
-  fetchPatient,
-} from "../../../../state/slices/patientSlice";
-import { AddMedicalConditions } from "../../../Guardian/AddPatient/AddMedicalConditions";
 
-export function UpdatePatient() {
-  const patient = useSelector(selectPatient);
+export function UpdatePatient({ patient }) {
   const [open, setOpen] = useState(false);
   const [patientName, setPatientName] = useState(patient.name);
   const [patientAddress, setPatientAddress] = useState(patient.address);
   const [patientPhone, setPatientPhone] = useState(patient.phone);
   const [patientAbout, setPatientAbout] = useState(patient.about);
   const navigate = useNavigate();
-  const [medicalConditions, setMedicalConditions] = useState(
-    patient.medicalConditions || []
-  );
-  const dispatch = useDispatch();
 
   function handleUpdatePatient() {
     const update = {
@@ -41,18 +29,12 @@ export function UpdatePatient() {
       address: patientAddress,
       about: patientAbout,
       phone: patientPhone,
-      medicalConditions: medicalConditions,
     };
 
     updatePatient(patient._id, update).then((updated) => {
-      dispatch(fetchPatient(patient._id));
       console.log("patient updated >>> ", updated);
       navigate(`/patient/${patient._id}`);
     });
-  }
-
-  function handleDeleteMedicalCondition(condition) {
-    setMedicalConditions(medicalConditions.filter((c) => c !== condition));
   }
 
   const handleOpen = () => setOpen(!open);
@@ -170,28 +152,6 @@ export function UpdatePatient() {
                 className: "hidden",
               }}
             />
-          </div>
-          <div>
-            <Typography
-              variant="h6"
-              color="blue-gray"
-              className="mb-2 text-left font-medium"
-            >
-              Medical Conditions
-            </Typography>
-            <AddMedicalConditions
-              medicalConditions={medicalConditions}
-              setMedicalConditions={setMedicalConditions}
-            />
-            <div className="flex flex-wrap gap-2 mt-3">
-              {medicalConditions.map((condition) => (
-                <Chip
-                  open={open}
-                  value={condition}
-                  onClose={() => handleDeleteMedicalCondition(condition)}
-                />
-              ))}
-            </div>
           </div>
           <div>
             <Typography

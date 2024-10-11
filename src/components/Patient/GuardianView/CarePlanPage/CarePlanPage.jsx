@@ -1,18 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import RoutineList from "./RoutinePlan/RoutineList";
+import RoutineList from "./RoutineList";
 import CarerInfoCard from "./PatientCarerInfoCard";
 import { CreateTaskContainer } from "./CreateTaskContainer";
-import { ViewSchedule } from "./SchedulePlan/ViewSchedule";
-import { useSelector } from "react-redux";
-import { selectPatient } from "../../../../state/slices/patientSlice";
+import { ViewSchedule } from "./ViewSchedule";
 
-export default function CarePlanPage() {
+export default function CarePlanPage({ patient }) {
   const [taskUpdates, setTaskUpdates] = useState(false);
-  const patient = useSelector(selectPatient);
 
   return (
-    <div className="p-2 flex flex-col items-center">
+    <div className="p-2 flex flex-col">
       <CarerInfoCard carer={patient.carers[0]} />
       <div className="w-full flex flex-row justify-evenly items-center mt-4">
         <CreateTaskContainer

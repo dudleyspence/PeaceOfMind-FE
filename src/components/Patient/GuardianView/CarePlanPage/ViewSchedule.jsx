@@ -7,43 +7,43 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { getScheduledTasks } from "../../../../../axios/task.axios";
+import { getScheduledTasks } from "../../../../axios/task.axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { EditScheduledTask } from "./EditScheduledTask";
-import ViewTaskNotes from "../ViewTaskNotes";
-import {
-  fetchScheduledTasks,
-  selectCarePlanError,
-  selectCarePlanLoading,
-  selectScheduledTasks,
-} from "../../../../../state/slices/carePlanSlice";
-import { useSelector, useDispatch } from "react-redux";
+import ViewTaskNotes from "./ViewTaskNotes";
 
 export function ViewSchedule({ taskUpdates, setTaskUpdates }) {
   const [open, setOpen] = useState(false);
-  const scheduledTasks = useSelector(selectScheduledTasks);
-  const dispatch = useDispatch();
-  const isLoading = useSelector(selectCarePlanLoading);
-  const error = useSelector(selectCarePlanError);
+  const [scheduledTasks, setScheduledTasks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { patient_id } = useParams();
 
   const handleOpen = () => setOpen(!open);
 
   useEffect(() => {
-    dispatch(fetchScheduledTasks(patient_id));
-  }, [dispatch, patient_id]);
+    setIsLoading(true);
+    console.log(patient_id);
+    getScheduledTasks(patient_id).then((tasks) => {
+      setIsLoading(false);
+      setScheduledTasks(tasks);
+      tasks.forEach((task) => {
+        const date = new Date(task.scheduleDate);
+        task.date = date.toLocaleDateString("en-GB", "PPP");
+        task.time = date.toLocaleTimeString("en-GB", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      });
+      console.log(tasks);
+    });
+  }, [patient_id, taskUpdates]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-500">Error: {error}</div>;
-  }
-
-  return (
+  return isLoading ? (
+    "Loading"
+  ) : (
     <>
       <Button onClick={handleOpen} variant="gradient" className="text-sm">
         Non-Routine Schedule
@@ -111,14 +111,14 @@ C0,477.733,17.126,494.859,38.25,494.859z"
             <XMarkIcon className="h-4 w-4 stroke-2" />
           </IconButton>
         </DialogHeader>
-        <DialogBody className="flex flex-col max-h-[70vh] overflow-scroll gap-5">
+        <DialogBody>
           {scheduledTasks.length > 0 ? (
             scheduledTasks.map((task) => (
               <div
                 key={task._id}
                 className="items-start bg-yellow-100 p-5 rounded-lg shadow-lg gap-2 flex flex-col"
               >
-                <p className="ml-2 font-bold text-black text-[14px]">
+                <p className="ml-2 !text-bold text-black text-[14px]">
                   {task.template.text}
                 </p>
                 <div className="flex flex-row gap-3 items-center">

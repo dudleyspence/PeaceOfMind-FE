@@ -17,20 +17,14 @@ import { useState } from "react";
 import {
   deleteTaskTemplate,
   updateTaskTemplate,
-} from "../../../../../axios/task.axios";
-import { useDispatch } from "react-redux";
-import { fetchRoutineTasks } from "../../../../../state/slices/carePlanSlice";
-import { useParams } from "react-router-dom";
+} from "../../../../axios/index.axios";
 
-export function EditRecurringTask({ task }) {
-  const { patient_id } = useParams();
+export function EditRecurringTask({ task, setTaskUpdates }) {
   const [open, setOpen] = useState(false);
   const [taskText, setTaskText] = useState(task.text);
   const [taskCategory, setTaskCategory] = useState(task.category);
   const [taskInterval, setTaskInterval] = useState(task.repeatInterval);
   const [taskNotes, setTaskNotes] = useState(task.notes ? task.notes : "");
-
-  const dispatch = useDispatch();
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
@@ -50,7 +44,7 @@ export function EditRecurringTask({ task }) {
 
   function handleDeleteTask() {
     deleteTaskTemplate(task._id).then(() => {
-      dispatch(fetchRoutineTasks(patient_id));
+      setTaskUpdates(true);
       setOpen(!open);
     });
   }
@@ -65,7 +59,7 @@ export function EditRecurringTask({ task }) {
       update.notes = taskNotes;
     }
     updateTaskTemplate(task._id, update).then(() => {
-      dispatch(fetchRoutineTasks(patient_id));
+      setTaskUpdates(true);
       setOpen(!open);
     });
   }

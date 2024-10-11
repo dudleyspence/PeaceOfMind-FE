@@ -6,12 +6,9 @@ import phone from "../../assets/dashboard/phone.svg";
 import email from "../../assets/dashboard/email.svg";
 import { NotificationsButton } from "../General/NotificationsButton";
 import { Button } from "@material-tailwind/react";
-import { AddPatient } from "./AddPatient/AddPatient";
-import { useAuth } from "../Context/AuthContext";
 
 export default function GuardianDashboard() {
-  const { guardianLoggedIn, currentUser } = useAuth();
-
+  const { guardianLoggedIn } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,22 +20,20 @@ export default function GuardianDashboard() {
     }
   }, [guardianLoggedIn]);
 
-  if (isLoading) {
-    return <p>Loading</p>;
-  }
-
-  return (
+  return isLoading ? (
+    "Loading User"
+  ) : (
     <div className="h-[calc(100%-6rem)] flex flex-col items-center gap-8">
       <div className="flex flex-row items-center gap-5 p-5 rounded-md shadow-lg bg-cyan-900 max-w-md">
         <div className="w-1/3 h-auto aspect-square rounded-full overflow-hidden max-w-36">
           <img
-            src={currentUser.user.profileImageURL}
+            src={guardianLoggedIn.user.profileImageURL}
             alt="profile image"
             className="w-full h-full object-cover transform scale-110"
           />
         </div>
         <div className="text-s text-white">
-          <p className="font-bold">{currentUser.user.name}</p>
+          <p className="font-bold">{guardianLoggedIn.user.name}</p>
           <p className="flex gap-1 items-center justify-start mt-2">
             <svg
               className="h-5 !fill-white"
@@ -67,7 +62,7 @@ export default function GuardianDashboard() {
                 />
               </g>
             </svg>
-            {currentUser.user.email}
+            {guardianLoggedIn.user.email}
           </p>
           <p className="flex gap-1 items-center justify-start mt-2">
             <svg
@@ -108,14 +103,14 @@ export default function GuardianDashboard() {
                 strokeMiterlimit="4"
               />
             </svg>{" "}
-            {currentUser.phone}
+            {guardianLoggedIn.phone}
           </p>
           <p></p>
         </div>
       </div>
       <div className="w-full max-w-md flex flex-row justify-between ">
         <NotificationsButton />
-        <AddPatient />
+        <Button className="text-sm">Add Patient</Button>
         <Button className="flex items-center justify-center px-3 gap-2 text-sm">
           <svg
             className="fill-white h-5 w-5"

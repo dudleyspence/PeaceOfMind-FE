@@ -10,10 +10,14 @@ import {
   Accordion,
   AccordionHeader,
   AccordionBody,
+  Alert,
+  Input,
   Drawer,
   Card,
 } from "@material-tailwind/react";
 import {
+  PresentationChartBarIcon,
+  ShoppingBagIcon,
   UserCircleIcon,
   Cog6ToothIcon,
   InboxIcon,
@@ -22,29 +26,40 @@ import {
 import {
   ChevronRightIcon,
   ChevronDownIcon,
+  CubeTransparentIcon,
+  MagnifyingGlassIcon,
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Context/AuthContext";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/firebase";
+import { UserContext } from "../../Context/UserContext";
 
 export function SideNavBar() {
   const [open, setOpen] = React.useState(0);
-  const { currentUser, handleSignOut } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-
+  const {
+    guardianLoggedIn,
+    carerLoggedIn,
+    setCarerLoggedIn,
+    setGuardianLoggedIn,
+  } = useContext(UserContext);
   const [patientsList, setPatientsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPatientsList(currentUser.patients);
-    setIsLoading(false);
-  }, [currentUser]);
+    setIsLoading(true);
+    if (guardianLoggedIn) {
+      setPatientsList(guardianLoggedIn.patients);
+      setIsLoading(false);
+    }
+    if (carerLoggedIn) {
+      setPatientsList(carerLoggedIn.patients);
+      setIsLoading(false);
+    }
+  }, [guardianLoggedIn, carerLoggedIn]);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -61,9 +76,12 @@ export function SideNavBar() {
   }
 
   function handleSignOutClick() {
-    handleSignOut().then(() => {
-      navigate("/login");
-    });
+    setCarerLoggedIn(null);
+    setGuardianLoggedIn(null);
+    localStorage.removeItem("guardianLoggedIn");
+    localStorage.removeItem("carerLoggedIn");
+    closeDrawer();
+    navigate("/login");
   }
 
   const openDrawer = () => setIsDrawerOpen(true);
