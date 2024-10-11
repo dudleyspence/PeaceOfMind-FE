@@ -13,42 +13,34 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { updatePatient } from "../../../../axios/patient.axios";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectPatient,
-  fetchPatient,
-} from "../../../../state/slices/patientSlice";
-import { AddMedicalConditions } from "../../../Guardian/AddPatient/AddMedicalConditions";
 
-export function UpdatePatient() {
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectPatient } from "../../../state/slices/patientSlice";
+import { AddMedicalConditions } from "./AddMedicalConditions";
+
+export function AddPatient() {
   const patient = useSelector(selectPatient);
   const [open, setOpen] = useState(false);
-  const [patientName, setPatientName] = useState(patient.name);
-  const [patientAddress, setPatientAddress] = useState(patient.address);
-  const [patientPhone, setPatientPhone] = useState(patient.phone);
-  const [patientAbout, setPatientAbout] = useState(patient.about);
+  const [patientName, setPatientName] = useState("");
+  const [patientAddress, setPatientAddress] = useState("");
+  const [patientPhone, setPatientPhone] = useState("");
+  const [patientAbout, setPatientAbout] = useState("");
+  const [medicalConditions, setMedicalConditions] = useState([]);
   const navigate = useNavigate();
-  const [medicalConditions, setMedicalConditions] = useState(
-    patient.medicalConditions || []
-  );
-  const dispatch = useDispatch();
 
-  function handleUpdatePatient() {
-    const update = {
-      name: patientName,
-      address: patientAddress,
-      about: patientAbout,
-      phone: patientPhone,
-      medicalConditions: medicalConditions,
-    };
-
-    updatePatient(patient._id, update).then((updated) => {
-      dispatch(fetchPatient(patient._id));
-      console.log("patient updated >>> ", updated);
-      navigate(`/patient/${patient._id}`);
-    });
+  function handleAddPatient() {
+    // const patient = {
+    //   name: patientName,
+    //   medicalConditions: [],
+    //   address: patientAddress,
+    //   about: patientAbout,
+    //   phone: patientPhone,
+    // };
+    // addPatient(patient).then((newPatient) => {
+    //   console.log("patient created >>> ", updated);
+    //   navigate(`/patient/${patient._id}`);
+    // });
   }
 
   function handleDeleteMedicalCondition(condition) {
@@ -63,14 +55,14 @@ export function UpdatePatient() {
         onClick={() => {
           handleOpen();
         }}
-        className="bg-blue-100 text-black shadow-lg flex flex-row items-center justify-center gap-2 w-4/5"
+        className="text-sm"
       >
-        Update Patient
+        Add Patient
       </Button>
       <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
         <DialogHeader className="relative m-0 block">
           <Typography variant="h4" color="blue-gray">
-            Update Patient
+            Create New Patient
           </Typography>
 
           <IconButton
@@ -142,6 +134,7 @@ export function UpdatePatient() {
               }}
             />
           </div>
+
           <div>
             <Typography
               variant="h6"
@@ -230,8 +223,8 @@ export function UpdatePatient() {
             <Button className="text-sm" onClick={handleOpen}>
               Cancel
             </Button>
-            <Button className="text-sm" onClick={handleUpdatePatient}>
-              Update Patient
+            <Button className="text-sm" onClick={handleAddPatient}>
+              Add Patient
             </Button>
           </div>
         </DialogFooter>

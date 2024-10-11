@@ -2,7 +2,7 @@
 const withMT = require("@material-tailwind/react/utils/withMT");
 
 export default withMT({
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}", "node_modules/preline/dist/*.js"],
   theme: {
     fontSize: {
       sm: "0.5rem",
@@ -23,7 +23,7 @@ export default withMT({
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("preline/plugin")],
 });
 
 // fdf3e8

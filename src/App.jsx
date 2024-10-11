@@ -6,34 +6,25 @@ import { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./components/Context/UserContext";
 import Header from "./components/Header/Header";
-import GuardianPatientViewDesktop from "./components/desktop/GuardianPatientViewDesktop";
+
 import CarerPatientView from "./components/Carer/CarerPatientView";
 import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
 import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
+import { LoginPage } from "./components/Auth/LoginPage";
+import { SignUpPage } from "./components/Auth/SignUpPage";
+import { useAuth } from "./components/Context/AuthContext";
 
 function App() {
-  const { guardianLoggedIn, carerLoggedIn } = useContext(UserContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [userLoggedIn, setUserLoggedIn] = useState(null);
+  const { guardianLoggedIn, carerLoggedIn, loading } = useAuth();
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (guardianLoggedIn) {
-      setUserLoggedIn("guardian");
-    }
-    if (carerLoggedIn) {
-      setUserLoggedIn("carer");
-    }
-    setIsLoading(false);
-  }, [guardianLoggedIn, carerLoggedIn]);
-
-  return isLoading ? (
+  return loading ? (
     "Loading"
   ) : (
     <div className="bg-backgroundCream min-h-screen box-border px-3">
       {(guardianLoggedIn || carerLoggedIn) && <Header />}
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/SignUp/:role" element={<SignUpPage />} />
         <Route
           path="/dashboard"
           element={

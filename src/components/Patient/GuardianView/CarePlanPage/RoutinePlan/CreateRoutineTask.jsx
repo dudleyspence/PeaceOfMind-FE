@@ -4,29 +4,30 @@ import {
   Input,
   Option,
   Select,
-  Alert,
   Typography,
   Textarea,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { postTask } from "../../../../axios/task.axios";
+import { postTask } from "../../../../../axios/task.axios";
 import { formatISO } from "date-fns";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRoutineTasks } from "../../../../../state/slices/carePlanSlice";
+import { selectPatientCarer } from "../../../../../state/slices/patientSlice";
 
-export function CreateRoutineTask({
-  open,
-  setOpen,
-  patient,
-  setShowAlert,
-  setTaskUpdates,
-}) {
+export function CreateRoutineTask({ open, setOpen, setShowAlert }) {
+  const { patient_id } = useParams();
   const [taskText, setTaskText] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
   const [taskInterval, setTaskInterval] = useState("");
   const [taskNotes, setTaskNotes] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const dispatch = useDispatch();
+
+  const carer = useSelector(selectPatientCarer);
 
   function handleTextChange(event) {
     setTaskText(event.target.value);
@@ -45,7 +46,6 @@ export function CreateRoutineTask({
   }
 
   function handlePostRoutineTask() {
-    console.log("posting");
     if (taskText && taskCategory && taskInterval && startDate) {
       setShowAlert(false);
       const routineTask = {
@@ -55,8 +55,8 @@ export function CreateRoutineTask({
         repeatInterval: taskInterval,
         nextInstanceDate: formatISO(startDate),
         startDate: formatISO(startDate),
-        patient: patient._id,
-        carer: patient.carers[0]._id,
+        patient: patient_id,
+        carer: carer._id,
       };
       if (endDate) {
         routineTask.repeatEndDate = endDate;
@@ -67,7 +67,7 @@ export function CreateRoutineTask({
 
       const task = { taskTemplate: routineTask };
       postTask(task).then(() => {
-        setTaskUpdates(true);
+        dispatch(fetchRoutineTasks(patient_id));
         setOpen(!open);
       });
     } else {
