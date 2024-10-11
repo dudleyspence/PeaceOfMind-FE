@@ -22,7 +22,7 @@ export function AddMedicalConditions({
         size="lg"
         value={currentMedical}
         onChange={({ target }) => setCurrentMedical(target.value)}
-        className="pr-20 text-[16px]"
+        className="pr-20 !text-[17px]"
         containerProps={{
           className: "min-w-0",
         }}

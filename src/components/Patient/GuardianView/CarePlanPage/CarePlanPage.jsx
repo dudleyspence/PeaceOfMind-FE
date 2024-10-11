@@ -5,7 +5,10 @@ import CarerInfoCard from "./PatientCarerInfoCard";
 import { CreateTaskContainer } from "./CreateTaskContainer";
 import { ViewSchedule } from "./SchedulePlan/ViewSchedule";
 import { useSelector } from "react-redux";
-import { selectPatient } from "../../../../state/slices/patientSlice";
+import {
+  selectPatient,
+  selectPatientCarer,
+} from "../../../../state/slices/patientSlice";
 
 export default function CarePlanPage() {
   const [taskUpdates, setTaskUpdates] = useState(false);
@@ -13,8 +16,8 @@ export default function CarePlanPage() {
 
   return (
     <div className="p-2 flex flex-col items-center">
-      <CarerInfoCard carer={patient.carers[0]} />
-      <div className="w-full flex flex-row justify-evenly items-center mt-4">
+      <CarerInfoCard />
+      <div className="w-full flex flex-row gap-3 justify-evenly items-center mt-4">
         <CreateTaskContainer
           taskUpdates={taskUpdates}
           setTaskUpdates={setTaskUpdates}

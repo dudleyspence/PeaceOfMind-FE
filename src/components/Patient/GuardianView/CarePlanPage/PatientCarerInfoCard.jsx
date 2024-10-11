@@ -14,6 +14,14 @@ export default function PatientCarerInfoCard() {
   const toggleOpen = () => setOpen((cur) => !cur);
   const carer = useSelector(selectPatientCarer);
 
+  if (!carer) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center bg-blue-100 w-full max-w-96  rounded-lg shadow-md min-h-20 overflow-hidden text-black">
+        <Typography>No carer assigned yet</Typography>
+      </div>
+    );
+  }
+
   return (
     <div
       id="carers-profile"

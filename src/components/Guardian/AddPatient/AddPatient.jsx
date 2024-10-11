@@ -13,34 +13,39 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-
+import { addPatient } from "../../../axios/index.axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectPatient } from "../../../state/slices/patientSlice";
+import { formatISO } from "date-fns";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { AddMedicalConditions } from "./AddMedicalConditions";
+import { useAuth } from "../../Context/AuthContext";
 
 export function AddPatient() {
-  const patient = useSelector(selectPatient);
   const [open, setOpen] = useState(false);
   const [patientName, setPatientName] = useState("");
+  const [patientDOB, setPatientDOB] = useState(null);
   const [patientAddress, setPatientAddress] = useState("");
   const [patientPhone, setPatientPhone] = useState("");
   const [patientAbout, setPatientAbout] = useState("");
   const [medicalConditions, setMedicalConditions] = useState([]);
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   function handleAddPatient() {
-    // const patient = {
-    //   name: patientName,
-    //   medicalConditions: [],
-    //   address: patientAddress,
-    //   about: patientAbout,
-    //   phone: patientPhone,
-    // };
-    // addPatient(patient).then((newPatient) => {
-    //   console.log("patient created >>> ", updated);
-    //   navigate(`/patient/${patient._id}`);
-    // });
+    const patient = {
+      name: patientName,
+      medicalConditions: medicalConditions,
+      address: patientAddress,
+      about: patientAbout,
+      phone: patientPhone,
+      guardians: [currentUser._id],
+      dob: formatISO(patientDOB),
+    };
+    addPatient(patient).then((newPatient) => {
+      console.log("patient created >>> ", newPatient);
+      navigate(`/patient/${newPatient._id}`);
+    });
   }
 
   function handleDeleteMedicalCondition(condition) {
@@ -164,10 +169,38 @@ export function AddPatient() {
               }}
             />
           </div>
+          <div className="w-full">
+            <Typography
+              variant="h6"
+              color="black"
+              className="mb-2 text-left font-medium"
+            >
+              Date of Birth
+            </Typography>
+            <ReactDatePicker
+              required={true}
+              selected={patientDOB}
+              onChange={(selectedDate) => {
+                setPatientDOB(selectedDate);
+              }}
+              dateFormat="PPP"
+              customInput={
+                <Input
+                  label="Select Date"
+                  value={patientDOB ? patientDOB : ""}
+                  style={{ fontSize: "16px" }}
+                />
+              }
+              popperContainer={({ children }) => (
+                <div className="z-[9999]">{children}</div>
+              )}
+            />
+          </div>
+
           <div>
             <Typography
               variant="h6"
-              color="blue-gray"
+              color="black"
               className="mb-2 text-left font-medium"
             >
               Medical Conditions

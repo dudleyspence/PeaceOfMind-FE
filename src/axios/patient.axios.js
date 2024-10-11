@@ -13,3 +13,9 @@ export const updatePatient = (patient_id, update) => {
       return data;
     });
 };
+
+export const addPatient = (patient) => {
+  return peaceOfMindAPI.post(`/patients`, patient).then(({ data }) => {
+    return data;
+  });
+};

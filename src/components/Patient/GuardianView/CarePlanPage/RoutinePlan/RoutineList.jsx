@@ -8,6 +8,7 @@ import {
   selectCarePlanError,
   selectCarePlanLoading,
   selectRoutineTasks,
+  selectScheduledTasks,
 } from "../../../../../state/slices/carePlanSlice";
 import { useParams } from "react-router-dom";
 import { fetchRoutineTasks } from "../../../../../state/slices/carePlanSlice";
@@ -19,6 +20,7 @@ export default function RoutineList() {
   const isLoading = useSelector(selectCarePlanLoading);
   const error = useSelector(selectCarePlanError);
   const repeatingTasks = useSelector(selectRoutineTasks);
+  const scheduledTasks = useSelector(selectScheduledTasks);
 
   const intervalColors = {
     Daily: "bg-blue-200",
@@ -38,6 +40,22 @@ export default function RoutineList() {
 
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  if (
+    repeatingTasks.Meals.length === 0 &&
+    repeatingTasks.Medical.length === 0 &&
+    repeatingTasks.Additional.length === 0 &&
+    repeatingTasks.Exercise.length === 0 &&
+    repeatingTasks.Hygiene.length === 0 &&
+    scheduledTasks.length === 0
+  ) {
+    return (
+      <div className="bg-teal-800 w-full min-h-20 flex flex-col justify-center items-center gap-5 rounded-lg my-5 p-5 text-white font-bold">
+        <p>No tasks found</p>
+        <p>Click above to create a care routine</p>
+      </div>
+    );
   }
 
   return (
