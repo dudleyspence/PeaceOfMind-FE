@@ -30,6 +30,7 @@ export function GuardianPatientView() {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
 
+
   const patient = useSelector(selectPatient);
   const isLoading = useSelector(selectPatientLoading);
   const error = useSelector(selectPatientError);
@@ -42,6 +43,7 @@ export function GuardianPatientView() {
 
   useEffect(() => {
     if (patient) {
+
       setData([
         {
           label: patient.name.split(" ")[0],
