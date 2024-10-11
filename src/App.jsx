@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "./components/Auth/Login";
 import GuardianDashboard from "./components/Guardian/GuardianDashboard";
 import CarerDashboard from "./components/Carer/CarerDashboard";
 import { useEffect, useState, useContext } from "react";
