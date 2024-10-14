@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 import { UserContext } from "./components/Context/UserContext";
 import Header from "./components/Header/Header";
 
-import CarerPatientView from "./components/Carer/CarerPatientView";
+import CarerPatientView from "./components/Patient/CarerView/CarerPatientView";
 import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
 import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
 import { LoginPage } from "./components/Auth/LoginPage";

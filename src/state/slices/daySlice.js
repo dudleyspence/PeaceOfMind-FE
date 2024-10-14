@@ -20,7 +20,6 @@ const sortTasksByCategory = (tasks) => {
     Additional: [],
     "Day Specific": [],
   };
-  console.log(tasks);
 
   tasks.forEach((task) => {
     if (task.template.category) {
@@ -39,7 +38,6 @@ export const fetchDayTasks = createAsyncThunk(
     try {
       const tasks = await getTasksForSpecificDay(patient_id, date);
       tasks.forEach((task) => {
-        console.log(task);
         if (!task.template.category) {
           task.template.category = "Day Specific";
           const date = new Date(task.scheduleDate);
@@ -77,7 +75,17 @@ const daySlice = createSlice({
     },
     progress: 0,
   },
-  reducers: {},
+  reducers: {
+    updateTaskCompletion: (state, action) => {
+      const { taskId, isCompleted } = action.payload;
+      const task = state.tasks.find((task) => task._id === taskId);
+      if (task) {
+        task.isCompleted = isCompleted;
+        state.progress = calculateProgress(state.tasks);
+        state.sortedTasks = sortTasksByCategory(state.tasks);
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchDayTasks.pending, (state) => {
@@ -97,7 +105,8 @@ const daySlice = createSlice({
   },
 });
 
-export const { setCurrentDay, resetDay, setChosenDay } = daySlice.actions;
+export const { resetDay, setChosenDay, updateTaskCompletion } =
+  daySlice.actions;
 
 export const selectDay = (state) => state.day.currentDay;
 export const selectDayTasks = (state) => state.day.tasks;

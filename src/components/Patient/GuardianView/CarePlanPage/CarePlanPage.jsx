@@ -5,6 +5,7 @@ import CarerInfoCard from "./PatientCarerInfoCard";
 import { CreateTaskContainer } from "./CreateTaskContainer";
 import { ViewSchedule } from "./SchedulePlan/ViewSchedule";
 import { useSelector } from "react-redux";
+import { Button } from "@material-tailwind/react";
 import {
   selectPatient,
   selectPatientCarer,
@@ -28,6 +29,7 @@ export default function CarePlanPage() {
           setTaskUpdates={setTaskUpdates}
           patient_id={patient._id}
         />
+        <Button className="text-sm">New Button</Button>
       </div>
       <RoutineList
         taskUpdates={taskUpdates}

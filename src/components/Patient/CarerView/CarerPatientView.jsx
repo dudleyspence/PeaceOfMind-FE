@@ -13,10 +13,10 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
-import GuardianPatientSettings from "./SettingsPage/GuardianPatientSettings";
+
 import CarePlan from "../../../assets/patient/CarePlan";
 import PatientComments from "../PatientTabs/PatientComments";
-import CarePlanPage from "./CarePlanPage/CarePlanPage";
+import CarerCarePlanPage from "./TodaysCarePage";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPatient } from "../../../state/slices/patientSlice";
 import {
@@ -24,59 +24,54 @@ import {
   selectPatientLoading,
   selectPatientError,
 } from "../../../state/slices/patientSlice";
-import {
-  selectDayProgress,
-  fetchDayTasks,
-} from "../../../state/slices/daySlice";
-import { formatISO } from "date-fns";
+import GuardianInfoCard from "./GuardianInfoCard";
 
-export function GuardianPatientView() {
+export default function CarerPatientView() {
   const { patient_id } = useParams();
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
-  const progress = useSelector(selectDayProgress);
+
   const patient = useSelector(selectPatient);
   const isLoading = useSelector(selectPatientLoading);
   const error = useSelector(selectPatientError);
-
-  const today = formatISO(new Date());
 
   useEffect(() => {
     if (!patient || patient._id !== patient_id) {
       dispatch(fetchPatient(patient_id));
     }
-    dispatch(fetchDayTasks({ patient_id, date: today }));
   }, [dispatch, patient, patient_id]);
 
   useEffect(() => {
     if (patient) {
       setData([
         {
-          label: patient.name.split(" ")[0],
-          value: "profile",
-          icon: UserCircleIcon,
+          label: "Todays Care",
+          value: "care_plan",
+          icon: CarePlan,
           desc: (
-            <div className="p-2 flex flex-col gap-5 rounded-lg">
-              <PatientInfoCard />
-              <div className="cursor-pointer hover:shadow-lg">
-                <ProgressTab completionPercentage={progress} />
-              </div>
-              <PatientComments />
-              <SelectDate />
+            <div className="w-full flex flex-col justify-center items-center">
+              <CarerCarePlanPage />
             </div>
           ),
         },
         {
-          label: "Care Plan",
-          value: "Care",
-          icon: CarePlan,
-          desc: <CarePlanPage />,
+          label: "Patient",
+          value: "patient",
+          icon: UserCircleIcon,
+          desc: (
+            <div className="p-2 flex flex-col gap-5 rounded-lg">
+              <PatientInfoCard />
+              <GuardianInfoCard />
+
+              <PatientComments />
+            </div>
+          ),
         },
         {
-          label: "Settings",
-          value: "settings",
+          label: "History",
+          value: "History",
           icon: Cog6ToothIcon,
-          desc: <GuardianPatientSettings patient={patient} />,
+          desc: <SelectDate />,
         },
       ]);
     }
@@ -91,7 +86,7 @@ export function GuardianPatientView() {
   }
 
   return (
-    <Tabs value="profile">
+    <Tabs value="care_plan">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
           <Tab key={value} value={value} className="text-base font-bold">

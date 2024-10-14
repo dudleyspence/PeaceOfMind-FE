@@ -18,6 +18,7 @@ const patientSlice = createSlice({
   initialState: {
     patient: null,
     carer: null,
+    guardian: null,
     isLoading: false,
     error: null,
   },
@@ -31,6 +32,7 @@ const patientSlice = createSlice({
       .addCase(fetchPatient.fulfilled, (state, action) => {
         state.patient = action.payload;
         state.carer = action.payload.carers[0];
+        state.guardian = action.payload.guardians[0];
         state.isLoading = false;
       })
       .addCase(fetchPatient.rejected, (state, action) => {
@@ -41,6 +43,7 @@ const patientSlice = createSlice({
 });
 
 export const selectPatientCarer = (state) => state.patient.carer;
+export const selectPatientGuardian = (state) => state.patient.guardian;
 export const selectPatient = (state) => state.patient.patient;
 export const selectPatientLoading = (state) => state.patient.isLoading;
 export const selectPatientError = (state) => state.patient.error;
