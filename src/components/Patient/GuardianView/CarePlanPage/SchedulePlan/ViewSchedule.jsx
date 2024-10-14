@@ -46,7 +46,7 @@ export function ViewSchedule({ taskUpdates, setTaskUpdates }) {
   return (
     <>
       <Button onClick={handleOpen} variant="gradient" className="text-sm">
-        Non-Routine Schedule
+        Day-Specific Tasks
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader className="relative m-0 block">

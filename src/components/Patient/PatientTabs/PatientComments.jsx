@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { CommentInput } from "./CommentInput";
+import { CommentInput } from "../GuardianView/CommentInput";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectComments,

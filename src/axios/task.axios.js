@@ -18,7 +18,9 @@ export const updateTaskInsance = (taskinstance_id, updates) => {
   console.log(taskinstance_id);
   return peaceOfMindAPI
     .patch(`/tasks/instances/${taskinstance_id}`, updates)
-    .then(({ data }) => {});
+    .then(({ data }) => {
+      console.log(data);
+    });
 };
 
 export const getTasksForSpecificDay = (patient_id, isoDate) => {

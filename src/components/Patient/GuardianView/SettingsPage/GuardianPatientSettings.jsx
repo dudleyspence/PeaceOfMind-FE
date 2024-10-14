@@ -7,7 +7,9 @@ export default function GuardianPatientSettings({ patient }) {
     <div className="w-full flex flex-col items-center justify-center gap-5 my-10">
       <UpdatePatient patient={patient} />
 
-      <Button className="bg-blue-100 w-4/5 text-black">Update Carer</Button>
+      <Button className="bg-blue-100 w-4/5 text-black">
+        Add / Update Carer
+      </Button>
       <Button className="bg-black text-white shadow-lg flex flex-row items-center justify-center gap-2 w-4/5">
         <svg
           className="h-4 w-4 fill-black"

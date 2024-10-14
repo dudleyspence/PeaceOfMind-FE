@@ -23,7 +23,9 @@ export default function ProgressTab({ completionPercentage }) {
   }, [patient_id]);
 
   function handleClick() {
-    navigate(`/patient/${patient_id}/${isoFormatDate}`);
+    if (isoFormatDate) {
+      navigate(`/patient/${patient_id}/${isoFormatDate}`);
+    }
   }
 
   return (
