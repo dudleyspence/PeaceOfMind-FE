@@ -7,7 +7,6 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { getScheduledTasks } from "../../../../../axios/task.axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { EditScheduledTask } from "./EditScheduledTask";
@@ -20,7 +19,7 @@ import {
 } from "../../../../../state/slices/carePlanSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-export function ViewSchedule({ taskUpdates, setTaskUpdates }) {
+export function ViewSchedule() {
   const [open, setOpen] = useState(false);
   const scheduledTasks = useSelector(selectScheduledTasks);
   const dispatch = useDispatch();
@@ -139,10 +138,7 @@ C0,477.733,17.126,494.859,38.25,494.859z"
                   {task.template.notes && (
                     <ViewTaskNotes notes={task.template.notes} />
                   )}
-                  <EditScheduledTask
-                    task={task}
-                    setTaskUpdates={setTaskUpdates}
-                  />
+                  <EditScheduledTask task={task} />
                 </div>
               </div>
             ))
