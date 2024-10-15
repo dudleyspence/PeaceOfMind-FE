@@ -80,7 +80,7 @@ export function GuardianPatientView() {
         },
       ]);
     }
-  }, [patient, patient_id]);
+  }, [patient, patient_id, progress]);
 
   if (isLoading) {
     return <div>Loading...</div>;

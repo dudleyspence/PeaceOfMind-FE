@@ -143,12 +143,3 @@ export default function GuardianDashboard() {
     </div>
   );
 }
-
-/*
-      <div className="bg-violet-200">
-        <p>Name: {guardianLoggedIn.user.name}</p>
-        <p>Email: {guardianLoggedIn.user.email}</p>
-        <p>Phone: {guardianLoggedIn.phone}</p>
-        <button>Click to update your contact info</button>
-      </div>
-*/

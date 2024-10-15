@@ -25,12 +25,13 @@ import {
   selectPatientError,
 } from "../../../state/slices/patientSlice";
 import GuardianInfoCard from "./GuardianInfoCard";
+import { selectDayProgress } from "../../../state/slices/daySlice";
 
 export default function CarerPatientView() {
   const { patient_id } = useParams();
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
-
+  const progress = useSelector(selectDayProgress);
   const patient = useSelector(selectPatient);
   const isLoading = useSelector(selectPatientLoading);
   const error = useSelector(selectPatientError);
@@ -49,7 +50,8 @@ export default function CarerPatientView() {
           value: "care_plan",
           icon: CarePlan,
           desc: (
-            <div className="w-full flex flex-col justify-center items-center">
+            <div className="w-full flex flex-col justify-center items-center gap-2">
+              <ProgressTab completionPercentage={progress} />
               <CarerCarePlanPage />
             </div>
           ),
@@ -75,7 +77,7 @@ export default function CarerPatientView() {
         },
       ]);
     }
-  }, [patient, patient_id]);
+  }, [patient, patient_id, progress]);
 
   if (isLoading) {
     return <div>Loading...</div>;

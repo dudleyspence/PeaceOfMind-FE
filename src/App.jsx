@@ -7,7 +7,7 @@ import { UserContext } from "./components/Context/UserContext";
 import Header from "./components/Header/Header";
 
 import CarerPatientView from "./components/Patient/CarerView/CarerPatientView";
-import GuardianDayReview from "./components/Patient/DayView/GuardianDayView";
+import PatientDayView from "./components/Patient/DayView/PatientDayView";
 import { GuardianPatientView } from "./components/Patient/GuardianView/GuardianPatientView";
 import { LoginPage } from "./components/Auth/LoginPage";
 import { SignUpPage } from "./components/Auth/SignUpPage";
@@ -51,10 +51,8 @@ function App() {
         <Route
           path="/patient/:patient_id/:isoDate"
           element={
-            guardianLoggedIn ? (
-              <GuardianDayReview />
-            ) : carerLoggedIn ? (
-              <Navigate to="/dashboard" />
+            guardianLoggedIn || carerLoggedIn ? (
+              <PatientDayView />
             ) : (
               <Navigate to="/login" />
             )

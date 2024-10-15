@@ -7,8 +7,8 @@ export default function GuardianInfoCard() {
   const guardian = useSelector(selectPatientGuardian);
 
   return (
-    <div className="flex flex-row justify-start bg-blue-100 w-full max-w-96  rounded-lg text-black shadow-md">
-      <div className="w-1/3 h-auto aspect-square rounded-lg overflow-hidden max-w-36">
+    <div className="flex flex-row justify-start bg-cyan-900 w-full max-w-96  rounded-lg text-white shadow-md">
+      <div className="w-1/4 h-auto aspect-square rounded-lg overflow-hidden max-w-36">
         <img
           src={guardian.user.profileImageURL}
           alt="patient image"
@@ -16,12 +16,12 @@ export default function GuardianInfoCard() {
         />
       </div>
       <div id="contact-info">
-        <p className="font-bold m-3 text-center text-black">
+        <p className="font-bold m-2 text-center text-white">
           Guardian: {guardian.user.name}
         </p>
         <p className="flex gap-1 items-center justify-start mt-2 text-base">
           <svg
-            className="h-5 !fill-black"
+            className="h-4 !fill-white"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             width="50"
@@ -51,7 +51,7 @@ export default function GuardianInfoCard() {
         </p>
         <p className="flex gap-1 items-center justify-start mt-2 text-base">
           <svg
-            className="fill-black h-5"
+            className="fill-white h-4"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             width="50"

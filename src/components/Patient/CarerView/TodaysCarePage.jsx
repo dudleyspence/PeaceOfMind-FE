@@ -48,7 +48,6 @@ export default function TodaysCarePage() {
 
   return (
     <div className="p-2 flex flex-col gap-4 pb-10 justify-center items-center w-full">
-      <ProgressTab completionPercentage={progress} />
       <div className="bg-pink-100 p-3 rounded-lg max-w-96 w-full">
         {totalTasks === 0 ? (
           <div className="w-full h-full flex flex-col gap-3 justify-center items-center">

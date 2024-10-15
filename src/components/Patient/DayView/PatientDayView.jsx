@@ -17,7 +17,7 @@ import {
   selectSortedDayTasks,
 } from "../../../state/slices/daySlice";
 
-export default function GuardianDayReview() {
+export default function PatientDayView() {
   const { patient_id, isoDate } = useParams();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectDayTasksLoading);
