@@ -68,7 +68,7 @@ export function AddPatient() {
         size="sm"
         open={open}
         handler={handleOpen}
-        className="p-4 max-h-[85vh] overflow-scroll self-center"
+        className="p-4 max-h-[85%] overflow-scroll self-start"
       >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h5" color="blue-gray">
