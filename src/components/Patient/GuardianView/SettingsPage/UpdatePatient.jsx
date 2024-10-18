@@ -67,7 +67,12 @@ export function UpdatePatient() {
       >
         Update Patient
       </Button>
-      <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+      <Dialog
+        size="sm"
+        open={open}
+        handler={handleOpen}
+        className="p-4 max-h-[95%] self-start overflow-scroll"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h4" color="blue-gray">
             Update Patient

@@ -16,10 +16,10 @@ export default function GuardianInfoCard() {
         />
       </div>
       <div id="contact-info">
-        <p className="font-bold m-2 text-center text-white">
+        <p className="font-bold mt-1 text-center text-white">
           Guardian: {guardian.user.name}
         </p>
-        <p className="flex gap-1 items-center justify-start mt-2 text-base">
+        <p className="flex gap-1 items-center justify-start text-base">
           <svg
             className="h-4 !fill-white"
             xmlns="http://www.w3.org/2000/svg"

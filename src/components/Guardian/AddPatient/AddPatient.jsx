@@ -64,9 +64,14 @@ export function AddPatient() {
       >
         Add Patient
       </Button>
-      <Dialog size="sm" open={open} handler={handleOpen} className="p-4">
+      <Dialog
+        size="sm"
+        open={open}
+        handler={handleOpen}
+        className="p-4 max-h-[95%] overflow-scroll self-start"
+      >
         <DialogHeader className="relative m-0 block">
-          <Typography variant="h4" color="blue-gray">
+          <Typography variant="h5" color="blue-gray">
             Create New Patient
           </Typography>
 

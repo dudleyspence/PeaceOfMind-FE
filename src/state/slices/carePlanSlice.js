@@ -37,6 +37,7 @@ export const fetchScheduledTasks = createAsyncThunk(
     try {
       const response = await getScheduledTasks(patient_id);
       response.forEach((task) => {
+        console.log(task);
         const date = new Date(task.scheduleDate);
         task.date = date.toLocaleDateString("en-GB", "PPP");
         task.time = date.toLocaleTimeString("en-GB", {

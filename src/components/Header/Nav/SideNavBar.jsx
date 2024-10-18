@@ -29,8 +29,6 @@ import {
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { signOut } from "firebase/auth";
-import { auth } from "../../../firebase/firebase";
 
 export function SideNavBar() {
   const [open, setOpen] = React.useState(0);
@@ -240,50 +238,3 @@ export function SideNavBar() {
     </>
   );
 }
-
-/*
-
-{patientsList.map((patient) => (
-          <li
-            onClick={() => {
-              handlePatientClick(patient._id);
-            }}
-            key={patient._id}
-            className="flex flex-row items-center justify-between gap-4 bg-white w-full p-5 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer"
-          >
-            <div>
-              <p className="mb-3 font-bold">{patient.name}</p>
-              <ProgressBar />
-            </div>
-            <img
-              src={patient.profileImageURL}
-              alt="patient image"
-              className="h-20 rounded-lg"
-            />
-          </li>
-        ))}*/
-
-/*
-{patientsList.map((patient) => (
-
-        ))}
-*/
-
-/*
-<AccordionBody className="py-1">
-
-                <List className="p-0">
-                {patientsList.map((patient) => (
-                <ListItem             onClick={() => {
-              handlePatientClick(patient._id);
-            }}
-            key={patient._id}>
-                    <ListItemPrefix>
-                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                    </ListItemPrefix>
-                    {patient.name}
-                </ListItem>
-                ))}
-                </List>
-              </AccordionBody>
-*/

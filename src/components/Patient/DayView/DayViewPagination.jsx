@@ -6,8 +6,14 @@ import { formatISO } from "date-fns";
 
 export function DayViewPagination() {
   const { patient_id, isoDate } = useParams();
+
   const navigate = useNavigate();
-  console.log(isoDate);
+
+  const chosenDate = new Date(isoDate);
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
   const prev = () => {
     const date = new Date(isoDate);
     date.setDate(date.getDate() - 1);
@@ -46,6 +52,7 @@ export function DayViewPagination() {
         size="sm"
         variant="outlined"
         onClick={next}
+        disabled={chosenDate > yesterday}
       >
         <p className="font-bold disabled:opacity-10" onClick={next}>
           next

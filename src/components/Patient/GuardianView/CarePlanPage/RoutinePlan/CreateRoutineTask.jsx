@@ -7,7 +7,7 @@ import {
   Typography,
   Textarea,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { postTask } from "../../../../../axios/task.axios";

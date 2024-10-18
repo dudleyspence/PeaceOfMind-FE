@@ -37,6 +37,7 @@ export const fetchDayTasks = createAsyncThunk(
   async ({ patient_id, date }, { rejectWithValue }) => {
     try {
       const tasks = await getTasksForSpecificDay(patient_id, date);
+
       tasks.forEach((task) => {
         if (!task.template.category) {
           task.template.category = "Day Specific";
@@ -48,6 +49,7 @@ export const fetchDayTasks = createAsyncThunk(
           });
         }
       });
+      console.log(tasks);
       return tasks;
     } catch (error) {
       return rejectWithValue(
