@@ -47,10 +47,10 @@ export default function PatientDayView() {
   }
 
   return (
-    <div className="p-2 flex flex-col gap-4 pb-10 justify-center items-center w-full">
+    <div className="p-2 justify-self-center flex flex-col gap-4 pb-10 justify-center items-center w-full max-w-[450px]">
       <DayViewPagination />
       <ProgressTab chosenDate={isoDate} completionPercentage={progress} />
-      <div className="bg-pink-100 p-3 rounded-lg max-w-96 w-full">
+      <div className="bg-pink-100 p-3 rounded-lg w-full">
         {totalTasks === 0 ? (
           <div className="w-full h-full flex flex-col gap-3 justify-center items-center">
             <img src={noTasks} alt="No Tasks images" className="h-32 w-32" />
