@@ -44,7 +44,11 @@ export function ViewSchedule() {
 
   return (
     <>
-      <Button onClick={handleOpen} variant="gradient" className="text-sm">
+      <Button
+        onClick={handleOpen}
+        variant="gradient"
+        className="text-sm w-full"
+      >
         Day-Specific Tasks
       </Button>
       <Dialog open={open} handler={handleOpen}>

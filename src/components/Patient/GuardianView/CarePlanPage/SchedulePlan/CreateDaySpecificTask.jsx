@@ -26,18 +26,19 @@ export function CreateDaySpecificTask({
   }
 
   function handlePostDaySpecificTask() {
+    console.log(scheduledDate.toISOString(), "<<<<< DATE");
     if (taskText && scheduledDate) {
       setShowAlert(false);
       const template = {
         text: taskText,
         isDaySpecific: true,
-        nextInstanceDate: formatISO(scheduledDate),
+        nextInstanceDate: scheduledDate.toISOString(),
         patient: patient_id,
         carer: patient.carers[0]._id,
         guardian: patient.guardians[0]._id,
       };
       const instance = {
-        scheduleDate: formatISO(scheduledDate),
+        scheduleDate: scheduledDate.toISOString(),
         carer: patient.carers[0]._id,
         patient: patient._id,
       };

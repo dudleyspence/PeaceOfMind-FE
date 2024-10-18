@@ -19,3 +19,11 @@ export const addPatient = (patient) => {
     return data;
   });
 };
+
+export const getProgress = (patient_id) => {
+  return peaceOfMindAPI
+    .get(`/patients/${patient_id}/todays-progress`)
+    .then(({ data }) => {
+      return data.progress;
+    });
+};

@@ -12,30 +12,16 @@ import {
 } from "../../../../state/slices/patientSlice";
 
 export default function CarePlanPage() {
-  const [taskUpdates, setTaskUpdates] = useState(false);
   const patient = useSelector(selectPatient);
 
   return (
-    <div className="p-2 flex flex-col items-center">
+    <div className="p-2 flex flex-col items-center !max-w-[450px] w-full">
       <CarerInfoCard />
-      <div className="w-full flex flex-row gap-3 justify-evenly items-center mt-4">
-        <CreateTaskContainer
-          taskUpdates={taskUpdates}
-          setTaskUpdates={setTaskUpdates}
-          patient={patient}
-        />
-        <ViewSchedule
-          taskUpdates={taskUpdates}
-          setTaskUpdates={setTaskUpdates}
-          patient_id={patient._id}
-        />
-        <Button className="text-sm">New Button</Button>
+      <div className="w-full flex flex-row gap-8 justify-between items-center mt-4">
+        <CreateTaskContainer patient={patient} />
+        <ViewSchedule patient_id={patient._id} />
       </div>
-      <RoutineList
-        taskUpdates={taskUpdates}
-        setTaskUpdates={setTaskUpdates}
-        patient_id={patient._id}
-      />
+      <RoutineList patient_id={patient._id} />
     </div>
   );
 }

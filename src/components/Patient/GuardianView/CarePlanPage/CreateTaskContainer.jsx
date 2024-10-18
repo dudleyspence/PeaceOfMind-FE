@@ -55,8 +55,8 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
   const handleOpen = () => setOpen(!open);
 
   return (
-    <div>
-      <Button onClick={handleOpen} className="text-sm">
+    <>
+      <Button onClick={handleOpen} className="text-sm w-full">
         Create Task
       </Button>
       <Dialog
@@ -121,6 +121,6 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
           </TabsBody>
         </Tabs>
       </Dialog>
-    </div>
+    </>
   );
 }

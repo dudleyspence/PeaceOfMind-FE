@@ -59,7 +59,7 @@ export default function RoutineList() {
   }
 
   return (
-    <div className="bg-teal-800 p-3 flex flex-col gap-5 rounded-lg my-5 text-black">
+    <div className="bg-teal-800 p-3 flex flex-col gap-5 rounded-lg my-5 w-full text-black">
       {repeatingTasks.Meals.length > 0 && (
         <ul id="Meals" className="bg-white p-5 rounded-lg shadow-lg">
           <div className="flex flex-row items-center gap-1 justify-start">

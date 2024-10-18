@@ -47,8 +47,8 @@ export default function TodaysCarePage() {
   }
 
   return (
-    <div className="p-2 flex flex-col gap-4 pb-10 justify-center items-center w-full">
-      <div className="bg-pink-100 p-3 rounded-lg max-w-96 w-full">
+    <div className="flex flex-col gap-4 pb-2 justify-center items-center w-full max-w-[450px]">
+      <div className="bg-pink-100 p-3 rounded-lg w-full">
         {totalTasks === 0 ? (
           <div className="w-full h-full flex flex-col gap-3 justify-center items-center">
             <img src={noTasks} alt="No Tasks images" className="h-32 w-32" />

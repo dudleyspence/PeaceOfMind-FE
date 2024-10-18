@@ -11,7 +11,6 @@ import { useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { postTask } from "../../../../../axios/task.axios";
-import { formatISO } from "date-fns";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRoutineTasks } from "../../../../../state/slices/carePlanSlice";
@@ -25,6 +24,33 @@ export function CreateRoutineTask({ open, setOpen, setShowAlert }) {
   const [taskNotes, setTaskNotes] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [nextInstanceDate, setNextInstanceDate] = useState(null);
+
+  useEffect(() => {
+    if (startDate && taskInterval) {
+      let nextDate = new Date(startDate);
+
+      switch (taskInterval) {
+        case "daily":
+          nextDate.setDate(nextDate.getDate() + 1);
+          break;
+        case "weekly":
+          nextDate.setDate(nextDate.getDate() + 7);
+          break;
+        case "biweekly":
+          nextDate.setDate(nextDate.getDate() + 14);
+          break;
+        case "monthly":
+          nextDate.setMonth(nextDate.getMonth() + 1);
+          break;
+        default:
+          break;
+      }
+
+      setNextInstanceDate(nextDate);
+    }
+  }, [taskInterval, startDate]);
+
   const dispatch = useDispatch();
 
   const carer = useSelector(selectPatientCarer);
@@ -46,15 +72,21 @@ export function CreateRoutineTask({ open, setOpen, setShowAlert }) {
   }
 
   function handlePostRoutineTask() {
-    if (taskText && taskCategory && taskInterval && startDate) {
+    if (
+      taskText &&
+      taskCategory &&
+      taskInterval &&
+      startDate &&
+      nextInstanceDate
+    ) {
       setShowAlert(false);
       const routineTask = {
         text: taskText,
         isDaySpecific: false,
         category: taskCategory,
         repeatInterval: taskInterval,
-        nextInstanceDate: formatISO(startDate),
-        startDate: formatISO(startDate),
+        nextInstanceDate: nextInstanceDate.toISOString(),
+        startDate: startDate.toISOString(),
         patient: patient_id,
         carer: carer._id,
       };

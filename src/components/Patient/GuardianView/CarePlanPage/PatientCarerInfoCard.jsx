@@ -16,7 +16,7 @@ export default function PatientCarerInfoCard() {
 
   if (!carer) {
     return (
-      <div className="flex flex-col items-center justify-center text-center bg-blue-100 w-full max-w-96  rounded-lg shadow-md min-h-20 overflow-hidden text-black">
+      <div className="flex flex-col items-center justify-center text-center bg-blue-100 w-full rounded-lg shadow-md min-h-20 overflow-hidden text-black">
         <Typography>No carer assigned yet</Typography>
       </div>
     );
@@ -25,7 +25,7 @@ export default function PatientCarerInfoCard() {
   return (
     <div
       id="carers-profile"
-      className="bg-blue-100 w-full max-w-96  rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden text-black"
+      className="bg-blue-100 w-full rounded-lg shadow-md min-h-40 cursor-pointer overflow-hidden text-black"
       onClick={toggleOpen}
     >
       <div className="flex flex-row justify-start">

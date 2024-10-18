@@ -111,6 +111,7 @@ export default function CarerDashboard() {
       </div>
       <div className="w-full max-w-md flex flex-row justify-between ">
         <NotificationsButton />
+        <Button className="text-sm">Extra Button</Button>
         <Button className="flex items-center justify-center px-3 gap-2 text-sm">
           <svg
             className="fill-white h-5 w-5"

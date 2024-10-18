@@ -50,7 +50,7 @@ export default function CarerPatientView() {
           value: "care_plan",
           icon: CarePlan,
           desc: (
-            <div className="w-full flex flex-col justify-center items-center gap-2">
+            <div className="p-2 w-full max-w-[450px] flex flex-col justify-center items-center gap-3">
               <ProgressTab completionPercentage={progress} />
               <CarerCarePlanPage />
             </div>

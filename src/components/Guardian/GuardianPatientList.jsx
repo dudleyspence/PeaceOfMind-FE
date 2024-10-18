@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PatientProgressBar } from "../Patient/PatientTabs/PatientProgressBar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
+import { TodaysPatientProgress } from "./todaysPatientProgress";
 
 export default function GuardianPatientList() {
   const { currentUser } = useAuth();
@@ -15,6 +16,9 @@ export default function GuardianPatientList() {
     setPatientsList(currentUser.patients);
     setIsLoading(false);
   }, [currentUser]);
+
+  // Create an endpoint get todays progress for a patient
+  // use this on each patient to see their progress
 
   function handlePatientClick(patient_id) {
     navigate(`/patient/${patient_id}`);
@@ -44,11 +48,11 @@ export default function GuardianPatientList() {
               handlePatientClick(patient._id);
             }}
             key={patient._id}
-            className="flex flex-row items-center justify-between gap-4 bg-blue-100 w-full p-3 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer text-black"
+            className="flex flex-row items-center justify-between gap-4 bg-white w-full p-5 mt-7 px-8 rounded-md shadow-lg max-w-md  hover:shadow-2xl cursor-pointer text-black"
           >
             <div>
-              <p className="mb-1 text-[18px] font-bold">{patient.name}</p>
-              {/* <PatientProgressBar /> */}
+              <p className="mb-3 font-bold">{patient.name}</p>
+              <TodaysPatientProgress patient_id={patient._id} />
             </div>
             <img
               src={patient.profileImageURL}

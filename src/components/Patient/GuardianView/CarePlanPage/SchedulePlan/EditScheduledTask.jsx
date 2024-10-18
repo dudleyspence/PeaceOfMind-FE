@@ -68,7 +68,7 @@ export function EditScheduledTask({ task }) {
       text: taskText,
     };
     const instanceUpdate = {
-      scheduleDate: formatISO(scheduleDate),
+      scheduleDate: scheduleDate.toISOString(),
     };
 
     if (taskNotes) {
