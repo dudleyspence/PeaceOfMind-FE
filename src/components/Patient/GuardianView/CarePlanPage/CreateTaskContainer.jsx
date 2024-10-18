@@ -63,7 +63,7 @@ export function CreateTaskContainer({ patient, setTaskUpdates }) {
         size="sm"
         open={open}
         handler={handleOpen}
-        className="p-4 overflow-visible !max-h-[95vh]"
+        className="p-4 overflow-visible !max-h-[95vh] self-start"
       >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h4" color="blue-gray">
