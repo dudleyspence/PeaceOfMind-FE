@@ -24,7 +24,7 @@ export default function CarerDashboard() {
   }
 
   return (
-    <div className="h-[calc(100%-6rem)] flex flex-col items-center gap-8 w-full max-w-[450px] self-center justify-self-center">
+    <div className="h-[calc(100%-6rem)] flex flex-col items-center gap-8 w-full max-w-[450px] self-center justify-self-center m-auto">
       <div className="flex flex-row items-center gap-5 p-5 rounded-md shadow-lg bg-blue-900">
         <div className="w-1/3 h-auto aspect-square rounded-full overflow-hidden">
           <img
