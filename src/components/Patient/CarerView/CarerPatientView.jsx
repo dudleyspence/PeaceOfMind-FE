@@ -9,7 +9,7 @@ import {
 import { UserCircleIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
 import ProgressTab from "../PatientTabs/PatientProgressTab";
 import { useParams } from "react-router-dom";
-
+import CarerRoutineList from "./CarerRoutineList";
 import { useState, useEffect } from "react";
 import PatientInfoCard from "../PatientTabs/PatientInfoCard";
 import SelectDate from "../PatientTabs/SelectCareDay";
@@ -26,6 +26,7 @@ import {
 } from "../../../state/slices/patientSlice";
 import GuardianInfoCard from "./GuardianInfoCard";
 import { selectDayProgress } from "../../../state/slices/daySlice";
+import { CarerViewSchedule } from "./CarerViewSchedule";
 
 export default function CarerPatientView() {
   const { patient_id } = useParams();
@@ -46,13 +47,24 @@ export default function CarerPatientView() {
     if (patient) {
       setData([
         {
-          label: "Todays Care",
-          value: "care_plan",
+          label: "Today",
+          value: "today",
           icon: CarePlan,
           desc: (
             <div className="p-2 w-full max-w-[450px] flex flex-col justify-center items-center gap-3">
               <ProgressTab completionPercentage={progress} />
               <CarerCarePlanPage />
+            </div>
+          ),
+        },
+        {
+          label: "Care Plan",
+          value: "care_plan",
+          icon: CarePlan,
+          desc: (
+            <div className="p-2 w-full max-w-[450px] flex flex-col justify-center items-center gap-3">
+              <CarerViewSchedule />
+              <CarerRoutineList />
             </div>
           ),
         },
@@ -64,7 +76,6 @@ export default function CarerPatientView() {
             <div className="p-2 flex flex-col gap-5 rounded-lg">
               <PatientInfoCard />
               <GuardianInfoCard />
-
               <PatientComments />
             </div>
           ),
@@ -88,7 +99,7 @@ export default function CarerPatientView() {
   }
 
   return (
-    <Tabs value="care_plan">
+    <Tabs value="today">
       <TabsHeader>
         {data.map(({ label, value, icon }) => (
           <Tab key={value} value={value} className="text-base font-bold">
